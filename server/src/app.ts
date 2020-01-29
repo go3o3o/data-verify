@@ -5,8 +5,8 @@ import * as http from 'http';
 
 import { createConnection, createConnections } from 'typeorm';
 
-import collectDataRouter from './routes/collectData';
-import collectCountRouter from './routes/collectCount';
+import collectData from './routes/collectData';
+import collectCount from './routes/collectCount';
 import dmapRequestRouter from './routes/dmapRequest';
 import nodeRequestRouter from './routes/nodeRequest';
 
@@ -27,8 +27,8 @@ async function runServer() {
   app.use(express.static(path.join(__dirname, 'public')));
   app.use('/dmap', dmapRequestRouter);
   app.use('/node', nodeRequestRouter);
-  app.use('/verify', collectDataRouter);
-  app.use('/count', collectCountRouter);
+  app.use('/count', collectCount);
+  app.use('/data', collectData);
 
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/index.html'));

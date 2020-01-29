@@ -6,30 +6,33 @@ import logger from '../logger';
 
 const router = express.Router();
 
-router.get('/:mode', async (req, res) => {
+router.post('', async (req, res) => {
   try {
     const manager = getConnectionManager().get('verify');
-    const repository = manager.getRepository(CollectCount);
-    const mode = req.params.mode;
+    const repository = manager
+      .getRepository(CollectCount)
+      .createQueryBuilder('count');
 
-    logger.debug(`mode ${mode}`);
+    const { customer_id, always_yn } = req.body;
 
     var datas = [];
 
-    if (mode === 'always') {
-      datas = await repository.find({
-        always_yn: 'Y',
-      });
-    } else if (mode === 'retroactive') {
-      datas = await repository.find({
-        always_yn: 'N',
-      });
+    if (customer_id === undefined) {
+      datas = await repository
+        .select('DISTINCT count.customer_id, always_yn')
+        .orderBy('count.customer_id')
+        .getRawMany();
+    } else {
+      datas = await repository
+        .select('count(*) AS count, seq, channel, doc_datetime, keyword')
+        .where({ customer_id: customer_id, always_yn: always_yn })
+        .groupBy('channel, doc_datetime, keyword')
+        .getRawMany();
     }
 
-    res.json(datas);
+    return res.json({ data: datas });
   } catch (e) {
-    res.status(404).json({ message: e.message });
-    throw new Error(e);
+    return res.status(500).json({ message: e.message });
   }
 });
 

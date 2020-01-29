@@ -35,15 +35,7 @@ tslib_1.__decorate([
 tslib_1.__decorate([
     typeorm_1.Column(),
     tslib_1.__metadata("design:type", String)
-], CollectData.prototype, "depth1_nm", void 0);
-tslib_1.__decorate([
-    typeorm_1.Column(),
-    tslib_1.__metadata("design:type", String)
-], CollectData.prototype, "depth2_nm", void 0);
-tslib_1.__decorate([
-    typeorm_1.Column(),
-    tslib_1.__metadata("design:type", String)
-], CollectData.prototype, "depth3_nm", void 0);
+], CollectData.prototype, "channel", void 0);
 tslib_1.__decorate([
     typeorm_1.Column(),
     tslib_1.__metadata("design:type", String)
@@ -56,6 +48,14 @@ tslib_1.__decorate([
     typeorm_1.Column(),
     tslib_1.__metadata("design:type", String)
 ], CollectData.prototype, "always_yn", void 0);
+tslib_1.__decorate([
+    typeorm_1.Column(),
+    tslib_1.__metadata("design:type", String)
+], CollectData.prototype, "md5", void 0);
+tslib_1.__decorate([
+    typeorm_1.Column(),
+    tslib_1.__metadata("design:type", String)
+], CollectData.prototype, "reg_dt", void 0);
 CollectData = tslib_1.__decorate([
     typeorm_1.Entity({ name: 'tb_collect_data' })
 ], CollectData);

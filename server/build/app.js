@@ -19,8 +19,8 @@ async function runServer() {
     app.use(express.static(path.join(__dirname, 'public')));
     app.use('/dmap', dmapRequest_1.default);
     app.use('/node', nodeRequest_1.default);
-    app.use('/verify', collectData_1.default);
     app.use('/count', collectCount_1.default);
+    app.use('/data', collectData_1.default);
     app.get('*', (req, res) => {
         res.sendFile(path.join(__dirname, 'public/index.html'));
     });

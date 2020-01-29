@@ -2,96 +2,83 @@ import * as express from 'express';
 
 import { getConnectionManager, IsNull } from 'typeorm';
 import { CollectData } from '../entities/CollectData';
-import logger from '../logger';
 
 const router = express.Router();
 
-router.get('/always', async (req, res) => {
+router.post('/:kind', async (req, res) => {
+  const kind = req.params.kind;
+
   try {
     const manager = getConnectionManager().get('verify');
-    const repository = manager.getRepository(CollectData);
+    const repository = manager.getRepository(CollectData).createQueryBuilder();
 
-    const datas = await repository.find({
-      always_yn: 'Y',
-    });
+    const { customer_id, channel } = req.body;
 
-    res.json(datas);
-  } catch (e) {
-    res.status(404).json({ message: e.message });
-    throw new Error(e);
-  }
-});
-
-router.get(
-  '/always/:customerId/:collect_type/:doc_datetime',
-  async (req, res) => {
-    try {
-      const manager = getConnectionManager().get('verify');
-      const repository = manager.getRepository(CollectData);
-
-      const params = {
-        customerId: req.params.customerId,
-        collect_type: req.params.collect_type,
-        doc_datetime: req.params.doc_datetime,
-      };
-
-      const datas = await repository.find({
-        always_yn: 'Y',
-        customer_id: params.customerId,
-        collect_type: params.collect_type,
-        doc_datetime: params.doc_datetime,
-      });
-
-      res.json(datas);
-    } catch (e) {
-      res.status(404).json({ message: e.message });
-      throw new Error(e);
+    var datas = [];
+    if (kind === 'always') {
+      if (customer_id === undefined && channel === undefined) {
+        datas = await repository
+          .where({ always_yn: 'Y' })
+          .groupBy('channel')
+          .orderBy({ customer_id: 'ASC' })
+          .getMany();
+      } else {
+        datas = await repository
+          .where({
+            always_yn: 'Y',
+            customer_id: customer_id,
+            channel: channel,
+          })
+          .orderBy({ doc_datetime: 'DESC' })
+          .getMany();
+      }
+    } else if (kind === 'retroactive') {
+      datas = await repository
+        .where({ always_yn: 'N' })
+        .groupBy('channel')
+        .orderBy({ customer_id: 'ASC' })
+        .getMany();
     }
-  },
-);
-
-router.get('/retroactive', async (req, res) => {
-  try {
-    const manager = getConnectionManager().get('verify');
-    const repository = manager.getRepository(CollectData);
-
-    const datas = await repository.find({
-      always_yn: 'N',
-    });
-
-    res.json(datas);
+    return res.json({ data: datas });
   } catch (e) {
-    res.status(404).json({ message: e.message });
-    throw new Error(e);
+    return res.status(500).json({ message: e.message });
   }
 });
 
-router.get(
-  '/retroactive/:customerId/:collect_type/:doc_datetime',
+router.post(
+  '/:kind/:customer_id/:collect_type/:doc_datetime',
   async (req, res) => {
+    const kind = req.params.kind;
+
     try {
       const manager = getConnectionManager().get('verify');
       const repository = manager.getRepository(CollectData);
 
-      const customerId = req.params.customerId;
+      const customer_id = req.params.customer_id;
       const collect_type = req.params.collect_type;
       const doc_datetime = req.params.doc_datetime;
 
-      const where = {
-        always_yn: 'N',
-        ...(customerId !== "''" && { customerId }),
-        ...(collect_type !== "''" && { collect_type }),
-        ...(doc_datetime !== "''" && { doc_datetime }),
-      };
+      var datas = [];
+      if (kind === 'always') {
+        datas = await repository.find({
+          always_yn: 'Y',
+          ...(customer_id !== "''" && { customer_id }),
+          ...(collect_type !== "''" && { collect_type }),
+          ...(doc_datetime !== "''" && { doc_datetime }),
+        });
+      } else if (kind === 'retroactive') {
+        datas = await repository.find({
+          always_yn: 'N',
+          ...(customer_id !== "''" && { customer_id }),
+          ...(collect_type !== "''" && { collect_type }),
+          ...(doc_datetime !== "''" && { doc_datetime }),
+        });
+      }
 
-      console.log(where);
-
-      const datas = await repository.find(where);
-
-      res.json(datas);
+      return res.json({ data: datas });
     } catch (e) {
       res.status(404).json({ message: e.message });
-      throw new Error(e);
+      return res.status(500).json({ message: e.message });
     }
   },
 );

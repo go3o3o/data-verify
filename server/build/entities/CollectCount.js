@@ -15,6 +15,10 @@ tslib_1.__decorate([
 tslib_1.__decorate([
     typeorm_1.Column(),
     tslib_1.__metadata("design:type", String)
+], CollectCount.prototype, "channel", void 0);
+tslib_1.__decorate([
+    typeorm_1.Column(),
+    tslib_1.__metadata("design:type", String)
 ], CollectCount.prototype, "keyword", void 0);
 tslib_1.__decorate([
     typeorm_1.Column(),
@@ -28,6 +32,10 @@ tslib_1.__decorate([
     typeorm_1.Column(),
     tslib_1.__metadata("design:type", String)
 ], CollectCount.prototype, "always_yn", void 0);
+tslib_1.__decorate([
+    typeorm_1.Column(),
+    tslib_1.__metadata("design:type", String)
+], CollectCount.prototype, "reg_dt", void 0);
 CollectCount = tslib_1.__decorate([
     typeorm_1.Entity({ name: 'tb_collect_count' })
 ], CollectCount);

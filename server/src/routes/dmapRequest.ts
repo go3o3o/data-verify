@@ -5,16 +5,22 @@ import { DmapRequest } from '../entities/DmapRequest';
 
 const router = express.Router();
 
-router.get('', async (req, res) => {
+router.post('/:kind', async (req, res) => {
+  const kind = req.params.kind;
   try {
     const manager = getConnectionManager().get('dmap');
     const repository = manager.getRepository(DmapRequest);
-    const datas = await repository.find();
+    var dmap = [];
+    if (kind === 'dmapStatus') {
+      dmap = await repository.find({ seq: 10 });
+    }
+    if (kind === 'dmapMonitoring') {
+      dmap = await repository.find({ seq: 2 });
+    }
 
-    res.json(datas);
+    return res.json({ data: dmap });
   } catch (e) {
-    res.status(404).json({ message: e.message });
-    throw new Error(e);
+    return res.status(500).json({ msg: e.message });
   }
 });
 

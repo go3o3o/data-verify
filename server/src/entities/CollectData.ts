@@ -24,13 +24,7 @@ export class CollectData {
   public doc_datetime!: string;
 
   @Column()
-  public depth1_nm!: string;
-
-  @Column()
-  public depth2_nm!: string;
-
-  @Column()
-  public depth3_nm!: string;
+  public channel: string;
 
   @Column()
   public attach_yn!: string;
@@ -40,4 +34,10 @@ export class CollectData {
 
   @Column()
   public always_yn!: string;
+
+  @Column()
+  public md5!: string;
+
+  @Column()
+  public reg_dt!: string;
 }

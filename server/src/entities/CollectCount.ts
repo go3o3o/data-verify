@@ -9,6 +9,9 @@ export class CollectCount {
   public customer_id!: string;
 
   @Column()
+  public channel!: string;
+
+  @Column()
   public keyword!: string;
 
   @Column()
@@ -19,4 +22,7 @@ export class CollectCount {
 
   @Column()
   public always_yn!: string;
+
+  @Column()
+  public reg_dt!: string;
 }

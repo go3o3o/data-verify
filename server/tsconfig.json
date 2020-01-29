@@ -37,6 +37,6 @@
     "types": ["node"],
     "typeRoots": ["../node_modules/@types"] // 타입(*.d.ts) 파일을 가져올 디렉토리 설정
   },
-  "include": ["./src/**/*.ts", "src/entities/index.js"],
+  "include": ["./src/**/*.ts"],
   "exclude": ["./src/public/*", "../node_modules/**/*"]
 }
