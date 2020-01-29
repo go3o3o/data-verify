@@ -1,11 +1,12 @@
 export enum STORES {
   NODE_STORE = 'nodeStore',
+  DMAP_STORE = 'dmapStore',
+  VERIFY_STORE = 'verifyStore',
 }
 
 export enum PAGE_PATHS {
   NODE = '/node',
   DMAP = '/dmap',
-  COLLECT_COUNT = '/collectCount',
-  COLLECT_ALWAYS = '/collectAlways',
-  COLLECT_RETROACTIVE = '/collectRetroactive',
+  COUNT = '/count',
+  DATA = '/data',
 }

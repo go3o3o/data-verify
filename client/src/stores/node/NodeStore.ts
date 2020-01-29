@@ -1,4 +1,4 @@
-import { action, observable, reaction } from 'mobx';
+import { action, observable } from 'mobx';
 import autobind from 'autobind-decorator';
 import NodeService, { NodeDto } from '~services/NodeService';
 
@@ -9,14 +9,9 @@ class NodeStore {
   private nodeService = new NodeService();
 
   @action
-  async status() {
-    const response = await this.nodeService.status();
-    this.setNode(response.data.data);
-  }
-
-  @action
-  async monitoring() {
-    const response = await this.nodeService.monitoring();
+  async nodeData(kind: string) {
+    const response = await this.nodeService.nodeData(kind);
+    // console.log(response.data.data);
     this.setNode(response.data.data);
   }
 

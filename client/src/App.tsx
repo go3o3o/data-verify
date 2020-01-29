@@ -23,16 +23,39 @@ export default class App extends Component {
     return (
       <Router>
         <Switch>
-          <Route path={PAGE_PATHS.NODE} component={NodeCollector} />
           <Route path={`${PAGE_PATHS.NODE}/:kind`} component={NodeCollector} />
           <Route path={`${PAGE_PATHS.DMAP}/:kind`} component={DmapCollector} />
-          <Route path={PAGE_PATHS.COLLECT_COUNT} component={CollectCount} />
-          <Route path={PAGE_PATHS.COLLECT_ALWAYS} component={CollectAlways} />
+
+          <Route path={`${PAGE_PATHS.COUNT}`} component={CollectCount} />
           <Route
-            path={PAGE_PATHS.COLLECT_RETROACTIVE}
+            path={`${PAGE_PATHS.COUNT}/:customer_id`}
+            component={CollectCount}
+          />
+
+          <Route path={`${PAGE_PATHS.DATA}/always`} component={CollectAlways} />
+          <Route
+            path={`${PAGE_PATHS.DATA}/always/:customer_id/:channel`}
+            component={CollectAlways}
+          />
+          <Route
+            path={`${PAGE_PATHS.DATA}/always/:customer_id/:collect_type/:doc_datetime`}
+            component={CollectAlways}
+          />
+
+          <Route
+            path={`${PAGE_PATHS.DATA}/retroactive`}
             component={CollectRetroactive}
           />
-          <Redirect from="/" to={PAGE_PATHS.NODE} />
+          <Route
+            path={`${PAGE_PATHS.DATA}/retroactive/:customer_id/:channel`}
+            component={CollectRetroactive}
+          />
+          <Route
+            path={`${PAGE_PATHS.DATA}/retroactive/:customer_id/:collect_type/:doc_datetime`}
+            component={CollectRetroactive}
+          />
+
+          <Redirect from="/" to={`${PAGE_PATHS.NODE}/nodeStatus`} />
         </Switch>
       </Router>
     );

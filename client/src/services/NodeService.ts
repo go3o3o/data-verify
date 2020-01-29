@@ -4,6 +4,7 @@ import { ApiResponse } from '~services/types';
 export type NodeDto = {
   seq: number;
   customer_seq: number;
+  channel_seq: number;
   type_cd: string;
   title: string;
   period: string;
@@ -23,12 +24,8 @@ export type NodeDto = {
 const API_HOST = process.env.API_HOST || 'http://localhost:8000';
 
 class NodeService {
-  async status(): Promise<ApiResponse<NodeDto[]>> {
-    return axios.get(`${API_HOST}/node/status`);
-  }
-
-  async monitoring(): Promise<ApiResponse<NodeDto[]>> {
-    return axios.get(`${API_HOST}/node/monitoring`);
+  async nodeData(kind: string): Promise<ApiResponse<NodeDto[]>> {
+    return axios.post(`${API_HOST}/node/${kind}`);
   }
 }
 
