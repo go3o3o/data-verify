@@ -16,6 +16,8 @@ import CollectRetroactive from '~pages/CollectRetroactive';
 import CollectAlways from '~pages/CollectAlways';
 
 @inject(STORES.NODE_STORE)
+@inject(STORES.DMAP_STORE)
+@inject(STORES.VERIFY_STORE)
 @observer
 @autobind
 export default class App extends Component {
@@ -24,6 +26,11 @@ export default class App extends Component {
       <Router>
         <Switch>
           <Route path={`${PAGE_PATHS.NODE}/:kind`} component={NodeCollector} />
+          <Route
+            path={`${PAGE_PATHS.NODE}/:kind/:request_seq`}
+            component={NodeCollector}
+          />
+
           <Route path={`${PAGE_PATHS.DMAP}/:kind`} component={DmapCollector} />
 
           <Route path={`${PAGE_PATHS.COUNT}`} component={CollectCount} />
@@ -32,13 +39,10 @@ export default class App extends Component {
             component={CollectCount}
           />
 
+          {/* <Route path={`${PAGE_PATHS.DATA}/always`} component={CollectAlways} /> */}
           <Route path={`${PAGE_PATHS.DATA}/always`} component={CollectAlways} />
           <Route
             path={`${PAGE_PATHS.DATA}/always/:customer_id/:channel`}
-            component={CollectAlways}
-          />
-          <Route
-            path={`${PAGE_PATHS.DATA}/always/:customer_id/:collect_type/:doc_datetime`}
             component={CollectAlways}
           />
 
@@ -47,11 +51,11 @@ export default class App extends Component {
             component={CollectRetroactive}
           />
           <Route
-            path={`${PAGE_PATHS.DATA}/retroactive/:customer_id/:channel`}
+            path={`${PAGE_PATHS.DATA}/retroactive/getCustomers`}
             component={CollectRetroactive}
           />
           <Route
-            path={`${PAGE_PATHS.DATA}/retroactive/:customer_id/:collect_type/:doc_datetime`}
+            path={`${PAGE_PATHS.DATA}/retroactive/:customer_id/:channel`}
             component={CollectRetroactive}
           />
 
