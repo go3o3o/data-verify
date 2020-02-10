@@ -11,8 +11,7 @@ import {
   ModalBody,
   ModalFooter,
 } from 'reactstrap';
-
-import 'antd/dist/antd.css';
+import { Card } from 'antd';
 
 import { STORES } from '~constants';
 
@@ -29,7 +28,7 @@ type InjectedProps = {
 class CollectCount extends Component<InjectedProps & RouteComponentProps> {
   constructor(props: any) {
     super(props);
-    this.state = { modal: false, customer_id: '' };
+    this.state = { modal: false, customer_id: '', always_yn: '' };
 
     this.toggle = this.toggle.bind(this);
   }
@@ -41,7 +40,10 @@ class CollectCount extends Component<InjectedProps & RouteComponentProps> {
   toggle = (e: any) => {
     this.setState({ modal: !this.state['modal'] });
     if (!this.state['modal']) {
-      this.setState({ customer_id: e.target.value });
+      this.setState({
+        customer_id: e.target.value,
+        always_yn: e.target.getAttribute('value2'),
+      });
     }
   };
 
@@ -67,108 +69,108 @@ class CollectCount extends Component<InjectedProps & RouteComponentProps> {
     return (
       <>
         <MenuBar subMenu="" />
-        <div style={{ padding: '20px' }}>
-          <Toast
-            fade={false}
-            style={{ minWidth: '100%', display: 'inline-block' }}
-          >
-            <ToastHeader style={{ fontSize: '1.2em' }}>
-              상시수집 건수
-            </ToastHeader>
-            <ToastBody>
-              {alwaysCount.map(v => (
-                <>
-                  <Button
-                    outline
-                    color="secondary"
-                    size="lg"
-                    onClick={this.toggle}
-                    value={v.customer_id}
-                    style={{ margin: '10px' }}
-                  >
-                    {v.customer_id}
-                  </Button>
-                </>
-              ))}
-              <Modal
-                isOpen={this.state['modal']}
-                toggle={this.toggle}
-                fade={false}
-                style={{ minWidth: '80%' }}
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ marginTop: 40 }}>
+            <Toast
+              fade={false}
+              style={{
+                textAlign: 'left',
+                minWidth: '95%',
+                display: 'inline-block',
+                marginBottom: 30,
+              }}
+            >
+              <ToastHeader
+                style={{
+                  fontSize: 18,
+                  padding: 10,
+                  marginLeft: 10,
+                  marginRight: 10,
+                }}
               >
-                <ModalHeader toggle={this.toggle} close={this.closeBtn}>
-                  {this.state['customer_id']} 수집 건수
-                </ModalHeader>
-                <ModalBody>
-                  <DetailCount
-                    verifyStore={this.props[STORES.VERIFY_STORE]}
-                    customer_id={this.state['customer_id']}
-                    always_yn="Y"
-                  />
-                </ModalBody>
-                <ModalFooter>
-                  <Button color="primary" onClick={this.toggle}>
-                    Do Something
-                  </Button>{' '}
-                  <Button color="secondary" onClick={this.toggle}>
-                    Cancel
-                  </Button>
-                </ModalFooter>
-              </Modal>
-            </ToastBody>
-          </Toast>
-        </div>
-        <div style={{ padding: '20px' }}>
-          <Toast
-            fade={false}
-            style={{ minWidth: '100%', display: 'inline-block' }}
-          >
-            <ToastHeader style={{ fontSize: '1.2em' }}>
-              소급수집 건수
-            </ToastHeader>
-            <ToastBody>
-              {retroactiveCount.map(v => (
-                <>
-                  <Button
-                    outline
-                    color="secondary"
-                    size="lg"
-                    onClick={this.toggle}
-                    value={v.customer_id}
-                    style={{ margin: '10px' }}
-                  >
-                    {v.customer_id}
-                  </Button>
-                </>
-              ))}
-              <Modal
-                isOpen={this.state['modal']}
-                toggle={this.toggle}
-                fade={false}
-                style={{ minWidth: '80%' }}
+                상시수집 건수
+              </ToastHeader>
+              <ToastBody>
+                {alwaysCount.map(v => (
+                  <>
+                    <Button
+                      outline
+                      color="secondary"
+                      size="lg"
+                      onClick={this.toggle}
+                      value={v.customer_id}
+                      value2="Y"
+                      style={{ margin: '10px' }}
+                    >
+                      {v.customer_id}
+                    </Button>
+                  </>
+                ))}
+              </ToastBody>
+            </Toast>
+            <Toast
+              fade={false}
+              style={{
+                textAlign: 'left',
+                minWidth: '95%',
+                display: 'inline-block',
+              }}
+            >
+              <ToastHeader
+                style={{
+                  fontSize: 18,
+                  padding: 10,
+                  marginLeft: 10,
+                  marginRight: 10,
+                }}
               >
-                <ModalHeader toggle={this.toggle} close={this.closeBtn}>
-                  {this.state['customer_id']} 수집 건수
-                </ModalHeader>
-                <ModalBody>
-                  <DetailCount
-                    verifyStore={this.props[STORES.VERIFY_STORE]}
-                    customer_id={this.state['customer_id']}
-                    always_yn="N"
-                  />
-                </ModalBody>
-                <ModalFooter>
-                  <Button color="primary" onClick={this.toggle}>
-                    Do Something
-                  </Button>{' '}
-                  <Button color="secondary" onClick={this.toggle}>
-                    Cancel
-                  </Button>
-                </ModalFooter>
-              </Modal>
-            </ToastBody>
-          </Toast>
+                소급수집 건수
+              </ToastHeader>
+              <ToastBody>
+                {retroactiveCount.map(v => (
+                  <>
+                    <Button
+                      outline
+                      color="secondary"
+                      size="lg"
+                      onClick={this.toggle}
+                      value={v.customer_id}
+                      value2="N"
+                      style={{ margin: '10px' }}
+                    >
+                      {v.customer_id}
+                    </Button>
+                  </>
+                ))}
+              </ToastBody>
+            </Toast>
+          </div>
         </div>
+        <Modal
+          isOpen={this.state['modal']}
+          toggle={this.toggle}
+          fade={false}
+          style={{ minWidth: '80%' }}
+        >
+          <ModalHeader toggle={this.toggle} close={this.closeBtn}>
+            {this.state['customer_id']} 수집 건수
+          </ModalHeader>
+          <ModalBody>
+            <DetailCount
+              verifyStore={this.props[STORES.VERIFY_STORE]}
+              customer_id={this.state['customer_id']}
+              always_yn={this.state['always_yn']}
+            />
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={this.toggle}>
+              Do Something
+            </Button>{' '}
+            <Button color="secondary" onClick={this.toggle}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </Modal>
       </>
     );
   }

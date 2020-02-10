@@ -1,5 +1,4 @@
-import React, { Component, useEffect } from 'react';
-import { RouteComponentProps, Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
 
 import { inject, observer } from 'mobx-react';
 
@@ -31,21 +30,44 @@ function DetailCount(props: InjectedProps) {
   const theDate = today.getDate();
 
   var weeks: string[] = [];
+  var retroWeeks: string[] = [];
 
-  for (var i = 0; i < 7; i++) {
-    var resultDay = new Date(theYear, theMonth, theDate - i);
-    var yyyy = resultDay.getFullYear();
+  if (props.always_yn === 'Y') {
+    for (var i = 0; i < 7; i++) {
+      var resultDay = new Date(theYear, theMonth, theDate - i);
+      var yyyy = resultDay.getFullYear();
 
-    var mm = Number(resultDay.getMonth()) + 1;
-    var dd = resultDay.getDate();
+      var mm = Number(resultDay.getMonth()) + 1;
+      var dd = resultDay.getDate();
 
-    var mm_str = '';
-    var dd_str = '';
+      var mm_str = '';
+      var dd_str = '';
 
-    mm_str = String(mm).length === 1 ? '0' + mm : String(mm);
-    dd_str = String(dd).length === 1 ? '0' + dd : String(dd);
-    weeks.push(`${yyyy}-${mm_str}-${dd_str}`);
+      mm_str = String(mm).length === 1 ? '0' + mm : String(mm);
+      dd_str = String(dd).length === 1 ? '0' + dd : String(dd);
+      weeks.push(`${yyyy}-${mm_str}-${dd_str}`);
+    }
+  } else if (props.always_yn === 'N') {
+    for (var i = 0; i < 8; i++) {
+      var resultDay = new Date(theYear, theMonth - i * 3, theDate);
+      var yyyy = resultDay.getFullYear();
+
+      var mm = Number(resultDay.getMonth()) + 1;
+      var dd = resultDay.getDate();
+
+      var q = Math.floor((resultDay.getMonth() + 3) / 3);
+
+      var mm_str = '';
+      var dd_str = '';
+
+      mm_str = String(mm).length === 1 ? '0' + mm : String(mm);
+      dd_str = String(dd).length === 1 ? '0' + dd : String(dd);
+      retroWeeks.push(`${yyyy}-${mm_str}-${dd_str}`);
+      weeks.push(`${yyyy}.${q}Q`);
+    }
   }
+
+  console.log(retroWeeks);
 
   var parsingCheck = new Set();
   var resultCheck = new Set();
@@ -55,51 +77,119 @@ function DetailCount(props: InjectedProps) {
   });
 
   var parseData: any[] = [];
-  parsingCheck.forEach(pc => {
-    var checkChannel = pc.split('&&')[0];
-    var checkKeyword = pc.split('&&')[1];
+  if (props.always_yn === 'Y') {
+    parsingCheck.forEach(pc => {
+      var checkChannel = pc.split('&&')[0];
+      var checkKeyword = pc.split('&&')[1];
 
-    var parseJson = {};
-    var count0 = 0;
-    var count1 = 0;
-    var count2 = 0;
-    var count3 = 0;
-    var count4 = 0;
-    var count5 = 0;
-    var count6 = 0;
+      var parseJson = {};
+      var count0 = 0;
+      var count1 = 0;
+      var count2 = 0;
+      var count3 = 0;
+      var count4 = 0;
+      var count5 = 0;
+      var count6 = 0;
 
-    customerCount.map(c => {
-      if (checkChannel === c.channel && checkKeyword === c.keyword) {
-        // console.log(checkChannel, checkKeyword, c.doc_datetime);
-        parseJson['seq'] = c.seq;
-        parseJson['channel'] = c.channel;
-        parseJson['keyword'] = c.keyword;
-        if (weeks[0] === c.doc_datetime) {
-          count0 = Number(c.count);
-        } else if (weeks[1] === c.doc_datetime) {
-          count1 = Number(c.count);
-        } else if (weeks[2] === c.doc_datetime) {
-          count2 = Number(c.count);
-        } else if (weeks[3] === c.doc_datetime) {
-          count3 = Number(c.count);
-        } else if (weeks[4] === c.doc_datetime) {
-          count4 = Number(c.count);
-        } else if (weeks[5] === c.doc_datetime) {
-          count5 = Number(c.count);
-        } else if (weeks[6] === c.doc_datetime) {
-          count6 = Number(c.count);
+      customerCount.map(c => {
+        if (checkChannel === c.channel && checkKeyword === c.keyword) {
+          // console.log(checkChannel, checkKeyword, c.doc_datetime);
+          parseJson['seq'] = c.seq;
+          parseJson['channel'] = c.channel;
+          parseJson['keyword'] = c.keyword;
+          if (weeks[0] === c.doc_datetime) {
+            count0 = Number(c.count);
+          } else if (weeks[1] === c.doc_datetime) {
+            count1 = Number(c.count);
+          } else if (weeks[2] === c.doc_datetime) {
+            count2 = Number(c.count);
+          } else if (weeks[3] === c.doc_datetime) {
+            count3 = Number(c.count);
+          } else if (weeks[4] === c.doc_datetime) {
+            count4 = Number(c.count);
+          } else if (weeks[5] === c.doc_datetime) {
+            count5 = Number(c.count);
+          } else if (weeks[6] === c.doc_datetime) {
+            count6 = Number(c.count);
+          }
+          parseJson[weeks[0]] = count0;
+          parseJson[weeks[1]] = count1;
+          parseJson[weeks[2]] = count2;
+          parseJson[weeks[3]] = count3;
+          parseJson[weeks[4]] = count4;
+          parseJson[weeks[5]] = count5;
+          parseJson[weeks[6]] = count6;
         }
-        parseJson[weeks[0]] = count0;
-        parseJson[weeks[1]] = count1;
-        parseJson[weeks[2]] = count2;
-        parseJson[weeks[3]] = count3;
-        parseJson[weeks[4]] = count4;
-        parseJson[weeks[5]] = count5;
-        parseJson[weeks[6]] = count6;
-      }
+      });
+      parseData.push(parseJson);
     });
-    parseData.push(parseJson);
-  });
+  } else if (props.always_yn === 'N') {
+    parsingCheck.forEach(pc => {
+      var checkChannel = pc.split('&&')[0];
+      var checkKeyword = pc.split('&&')[1];
+
+      var parseJson = {};
+      var count0 = 0;
+      var count1 = 0;
+      var count2 = 0;
+      var count3 = 0;
+      var count4 = 0;
+      var count5 = 0;
+      var count6 = 0;
+
+      customerCount.map(c => {
+        if (checkChannel === c.channel && checkKeyword === c.keyword) {
+          parseJson['seq'] = c.seq;
+          parseJson['channel'] = c.channel;
+          parseJson['keyword'] = c.keyword;
+          if (
+            retroWeeks[1] < c.doc_datetime &&
+            retroWeeks[0] >= c.doc_datetime
+          ) {
+            count0 = Number(c.count);
+          } else if (
+            retroWeeks[2] < c.doc_datetime &&
+            retroWeeks[1] >= c.doc_datetime
+          ) {
+            count1 = Number(c.count);
+          } else if (
+            retroWeeks[3] < c.doc_datetime &&
+            retroWeeks[2] >= c.doc_datetime
+          ) {
+            count2 = Number(c.count);
+          } else if (
+            retroWeeks[4] < c.doc_datetime &&
+            retroWeeks[3] >= c.doc_datetime
+          ) {
+            count3 = Number(c.count);
+          } else if (
+            retroWeeks[5] <= c.doc_datetime &&
+            retroWeeks[4] > c.doc_datetime
+          ) {
+            count4 = Number(c.count);
+          } else if (
+            retroWeeks[6] <= c.doc_datetime &&
+            retroWeeks[5] > c.doc_datetime
+          ) {
+            count5 = Number(c.count);
+          } else if (
+            retroWeeks[7] <= c.doc_datetime &&
+            retroWeeks[6] > c.doc_datetime
+          ) {
+            count6 = Number(c.count);
+          }
+          parseJson[weeks[0]] = count0;
+          parseJson[weeks[1]] = count1;
+          parseJson[weeks[2]] = count2;
+          parseJson[weeks[3]] = count3;
+          parseJson[weeks[4]] = count4;
+          parseJson[weeks[5]] = count5;
+          parseJson[weeks[6]] = count6;
+        }
+      });
+      parseData.push(parseJson);
+    });
+  }
 
   var resultData: any[] = [];
   var resultJson = {};
@@ -156,8 +246,6 @@ function DetailCount(props: InjectedProps) {
     resultJson['children'] = childData;
     resultData.push(resultJson);
   });
-
-  console.log(resultData);
 
   const columns = [
     { title: '', datIndex: 'list', key: 'list', width: '3%' },
