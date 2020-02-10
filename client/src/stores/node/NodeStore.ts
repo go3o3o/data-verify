@@ -10,9 +10,17 @@ class NodeStore {
 
   @action
   async nodeData(kind: string) {
-    const response = await this.nodeService.nodeData(kind);
+    const nodeData = await this.nodeService.nodeData(kind);
+    const customerIds = await this.nodeService.getCustomers();
     // console.log(response.data.data);
-    this.setNode(response.data.data);
+    // this.setNode(response.data.data);
+    return { nodeData, customerIds };
+  }
+
+  @action
+  async nodeDetailData(request_seq: number) {
+    const nodeDetailData = await this.nodeService.nodeDetailData(request_seq);
+    return nodeDetailData;
   }
 
   @action
