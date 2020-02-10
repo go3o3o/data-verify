@@ -32,7 +32,6 @@ class MenuBar extends Component<MenuFilterProps> {
     this.toggle = this.toggle.bind(this);
   }
   toggle() {
-    
     this.setState({ open: !this.state['open'] });
   }
 
@@ -48,7 +47,7 @@ class MenuBar extends Component<MenuFilterProps> {
                   <DropdownToggle
                     nav
                     caret
-                    style={{ fontSize: '1.25em', paddingRight: 20 }}
+                    style={{ fontSize: 22, paddingRight: 20 }}
                   >
                     신규수집기
                   </DropdownToggle>
@@ -76,7 +75,7 @@ class MenuBar extends Component<MenuFilterProps> {
                   <DropdownToggle
                     nav
                     caret
-                    style={{ fontSize: '1.25em', paddingRight: 20 }}
+                    style={{ fontSize: 22, paddingRight: 20 }}
                   >
                     디맵수집기
                   </DropdownToggle>
@@ -103,7 +102,7 @@ class MenuBar extends Component<MenuFilterProps> {
 
                 <NavItem>
                   <NavLink
-                    style={{ fontSize: '1.25em', paddingRight: 20 }}
+                    style={{ fontSize: 22, paddingRight: 20 }}
                     activeClassName="active"
                     tag={RRNavLink}
                     to="/count"
@@ -113,7 +112,7 @@ class MenuBar extends Component<MenuFilterProps> {
                 </NavItem>
                 <NavItem>
                   <NavLink
-                    style={{ fontSize: '1.25em', paddingRight: 20 }}
+                    style={{ fontSize: 22, paddingRight: 20 }}
                     activeClassName="active"
                     tag={RRNavLink}
                     to="/data/always"
@@ -123,7 +122,7 @@ class MenuBar extends Component<MenuFilterProps> {
                 </NavItem>
                 <NavItem>
                   <NavLink
-                    style={{ fontSize: '1.25em', paddingRight: 20 }}
+                    style={{ fontSize: 22, paddingRight: 20 }}
                     activeClassName="active"
                     tag={RRNavLink}
                     to="/data/retroactive"

@@ -29,7 +29,6 @@ class CountService {
   async countDataByCustomerId(
     body: DetailCountDto,
   ): Promise<ApiResponse<CountDto[]>> {
-    console.log(body);
     return axios.post(`${API_HOST}/count`, body);
   }
 }

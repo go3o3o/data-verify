@@ -1,6 +1,10 @@
 import { action, observable, reaction, computed } from 'mobx';
 import autobind from 'autobind-decorator';
-import DataService, { DataDto, DetailDto } from '~services/DataService';
+import DataService, {
+  DataDto,
+  DetailDto,
+  CustomerDto,
+} from '~services/DataService';
 import CountService, { CountDto, DetailCountDto } from '~services/CountService';
 
 export type Detail = {
@@ -10,13 +14,13 @@ export type Detail = {
 
 @autobind
 class VerifyStore {
-  @observable detail: Detail | undefined;
   @observable customer_id = '';
   @observable channel = '';
   @observable always_yn = '';
 
   @observable data: DataDto[] = [];
   @observable detailData: DataDto[] = [];
+  @observable customers: CustomerDto[] = [];
   @observable count: CountDto[] = [];
   @observable customerCount: CountDto[] = [];
 
@@ -25,66 +29,36 @@ class VerifyStore {
 
   @action
   async alwaysData() {
-    const response = await this.dataService.alwaysData();
-    this.setData(response.data.data);
+    const alwaysData = await this.dataService.alwaysData();
+    const customerIds = await this.dataService.getAlwaysCustomers();
+    this.setData(alwaysData.data.data);
+    this.setCustomers(customerIds.data.data);
   }
 
   @action
-  async alwaysDetailData() {
-    const body: DetailDto = {
-      customer_id: this.customer_id,
-      channel: this.channel,
-    };
-
-    const response = await this.dataService.alwaysDataDetail(body);
-    this.setDetailData(response.data.data);
-    console.log('[verifyStore] detailData ' + this.detailData.length);
+  async alwaysDetailData(customer_id: string, channel: string) {
+    const alwaysDetailData = await this.dataService.alwaysDataDetail(
+      customer_id,
+      channel,
+    );
+    return alwaysDetailData;
   }
 
   @action
   async retroactiveData() {
-    const response = await this.dataService.retroactiveData();
-    this.setData(response.data.data);
+    const retroactiveData = await this.dataService.retroactiveData();
+    const customerIds = await this.dataService.getRetroactiveCustomers();
+    this.setData(retroactiveData.data.data);
+    this.setCustomers(customerIds.data.data);
   }
 
   @action
-  async retroactiveDetailData() {
-    const body: DetailDto = {
-      customer_id: this.customer_id,
-      channel: this.channel,
-    };
-    const response = await this.dataService.retroactiveDataDetail(body);
-    console.log(response.data.data);
-    this.setData(response.data.data);
-  }
-
-  @action
-  async searchAlwaysData(
-    customerId: string,
-    collectType: string,
-    docDatetime: string,
-  ) {
-    const response = await this.dataService.searchAlwaysData(
-      customerId,
-      collectType,
-      docDatetime,
+  async retroactiveDetailData(customer_id: string, channel: string) {
+    const retroactiveDetailData = await this.dataService.retroactiveDataDetail(
+      customer_id,
+      channel,
     );
-    this.setData(response.data.data);
-  }
-
-  @action
-  async searchRetroactiveData(
-    customerId: string,
-    collectType: string,
-    docDatetime: string,
-  ) {
-    const response = await this.dataService.searchRetroactiveData(
-      customerId,
-      collectType,
-      docDatetime,
-    );
-    console.log(response.data.data);
-    this.setData(response.data.data);
+    return retroactiveDetailData;
   }
 
   @action
@@ -106,14 +80,14 @@ class VerifyStore {
   }
 
   @action
+  setChannel(channel: string) {
+    this.channel = channel;
+  }
+  @action
   setCustomerId(customer_id: string) {
     this.customer_id = customer_id;
   }
 
-  @action
-  setChannel(channel: string) {
-    this.channel = channel;
-  }
   @action
   setAlwaysYn(always_yn: string) {
     this.always_yn = always_yn;
@@ -122,6 +96,11 @@ class VerifyStore {
   @action
   setData(data: DataDto[]) {
     this.data = data;
+  }
+
+  @action
+  async setCustomers(customers: CustomerDto[]) {
+    this.customers = customers;
   }
 
   @action
