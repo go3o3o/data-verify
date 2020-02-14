@@ -13,7 +13,7 @@ type InjectedProps = {
 };
 
 class NodeMonitoring extends Component<InjectedProps> {
-  constructor(props) {
+  constructor(props: any) {
     super(props);
 
     this.props.monitoringData.map(md => {
@@ -73,10 +73,20 @@ class NodeMonitoring extends Component<InjectedProps> {
   };
 
   handleSearch = searchText => {
-    const filteredEvents = this.state['node'].filter(({ title }) => {
-      title = title.toLowerCase();
-      return title.includes(searchText);
-    });
+    var filteredEvents = this.props.monitoringData.filter(
+      ({ channel, title, keyword }) => {
+        // console.log(channel, title, keyword);
+        if (keyword !== null) {
+          return (
+            channel.includes(searchText) ||
+            title.includes(searchText) ||
+            keyword.includes(searchText)
+          );
+        } else {
+          return channel.includes(searchText) || title.includes(searchText);
+        }
+      },
+    );
 
     this.setState({
       node: filteredEvents,
@@ -86,7 +96,7 @@ class NodeMonitoring extends Component<InjectedProps> {
   render() {
     return (
       <>
-        <Form layout="inline" style={{ textAlign: 'left', marginBottom: 30 }}>
+        <Form layout="inline" style={{ textAlign: 'left', marginBottom: 25 }}>
           <Form.Item>
             <FilterCustomer
               filterBy={this.handleFilterCustomer}
@@ -100,7 +110,6 @@ class NodeMonitoring extends Component<InjectedProps> {
           <Form.Item>
             <FilterSearch onSearch={this.handleSearch} />
           </Form.Item>
-          {/* <TitleSearch onSearch={this.handleSearch} /> */}
         </Form>
         <NodeTable eventsData={this.state['node']} />
       </>

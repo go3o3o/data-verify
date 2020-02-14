@@ -7,17 +7,6 @@ export const FilterCustomer = ({ filterBy, customers, ...props }) => {
     filterBy(value);
   };
 
-  // const menu = (
-  //   <Menu onClick={onClick}>
-  //     {Array.from(customers).map(customer => (
-  //       <Menu.Item key={customer['name']}>{customer['name']}</Menu.Item>
-  //     ))}
-
-  //     <Menu.Divider />
-  //     <Menu.Item key="7">Clear Filter</Menu.Item>
-  //   </Menu>
-  // );
-
   return (
     <>
       <Input.Group compact>
@@ -26,8 +15,11 @@ export const FilterCustomer = ({ filterBy, customers, ...props }) => {
           size="large"
           style={{
             color: '#353A40',
+            backgroundColor: '#fafafa',
+            border: '1px solid #D9D9D9',
             fontSize: 15,
-            width: 65,
+            width: 70,
+            verticalAlign: 'middle',
           }}
         >
           고객명
@@ -49,16 +41,6 @@ export const FilterCustomer = ({ filterBy, customers, ...props }) => {
           ))}
         </Select>
       </Input.Group>
-      {/* <Dropdown
-        className="filter"
-        overlay={menu}
-        trigger={['click']}
-        placement="bottomLeft"
-      >
-        <a className="ant-dropdown-link" href="#">
-          Filter By Customer <Icon type="down" />
-        </a>
-      </Dropdown> */}
     </>
   );
 };

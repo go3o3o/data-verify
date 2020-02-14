@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  Menu,
-  Dropdown,
-  Icon,
-  Select,
-  Divider,
-  Avatar,
-  Input,
-  Form,
-} from 'antd';
+import { Select, Avatar, Input } from 'antd';
 import 'antd/dist/antd.css';
 
 export const FilterStatus = ({ filterBy, ...props }) => {
@@ -24,8 +15,11 @@ export const FilterStatus = ({ filterBy, ...props }) => {
           size="large"
           style={{
             color: '#353A40',
+            backgroundColor: '#fafafa',
+            border: '1px solid #D9D9D9',
             fontSize: 15,
-            width: 65,
+            width: 70,
+            verticalAlign: 'middle',
           }}
         >
           상태

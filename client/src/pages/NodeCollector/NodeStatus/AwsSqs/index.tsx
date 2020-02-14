@@ -2,22 +2,28 @@ import React, { Component } from 'react';
 import aws from 'aws-sdk';
 
 import { Table, Spin } from 'antd';
-import 'antd/dist/antd.css';
 import { ColumnProps } from 'antd/lib/table';
+import 'antd/dist/antd.css';
+
+// import { config } from "~assets/config";
 
 type InjectedProps = {
   reload: number;
 };
 
+// const region = config.region;
+// const accessKeyId = config.access_key_id;
+// const secretAccessKey = config.secret_access_key;
+
 class AwsSqs extends Component<InjectedProps> {
   constructor(props: any) {
     super(props);
 
-    aws.config.update({
-      region: '',
-      accessKeyId: '',
-      secretAccessKey: '',
-    });
+    // aws.config.update({
+    //   region: region,
+    //   accessKeyId: accessKeyId,
+    //   secretAccessKey: secretAccessKey
+    // });
 
     this.state = {
       queueList: undefined,
@@ -77,7 +83,7 @@ class AwsSqs extends Component<InjectedProps> {
   render() {
     // console.log(this.state['queueList']);
     const columns: ColumnProps<any>[] = [
-      { title: 'URL', dataIndex: 'queryUrl', key: 'queryUrl' },
+      { title: 'URL', dataIndex: 'queryUrl', key: 'queryUrl', width: '50%' },
       {
         title: '큐 사이즈',
         dataIndex: 'msgSize',

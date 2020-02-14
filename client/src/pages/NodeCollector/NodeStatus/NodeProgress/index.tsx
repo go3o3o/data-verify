@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Progress } from 'reactstrap';
 import { Tooltip } from 'antd';
 
@@ -7,6 +7,7 @@ type InjectedProps = {
   viewComplete: boolean;
   viewWorking: boolean;
   viewError: boolean;
+  reload: number;
 };
 
 function NodeProgress(props: InjectedProps) {
@@ -29,17 +30,17 @@ function NodeProgress(props: InjectedProps) {
         <p style={{ marginBottom: 0 }}>{props.customer.name}</p>
         <Progress multi style={{ height: 30 }} max={sumCnt}>
           {props.viewComplete ? (
-            <Progress animated bar value={complete}>
+            <Progress bar value={complete} >
               <Tooltip title={complete}>{complete}</Tooltip>
             </Progress>
           ) : null}
           {props.viewWorking ? (
-            <Progress animated bar color="warning" value={working}>
+            <Progress animated bar color="warning" value={working} >
               <Tooltip title={working}>{working}</Tooltip>
             </Progress>
           ) : null}
           {props.viewError ? (
-            <Progress animated bar color="danger" value={error}>
+            <Progress animated bar color="danger" value={error} >
               <Tooltip title={error}>{error}</Tooltip>
             </Progress>
           ) : null}
