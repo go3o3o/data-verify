@@ -1,8 +1,8 @@
 import React from 'react';
-import { Menu, Dropdown, Icon, Divider, Select, Avatar, Input } from 'antd';
+import { Select, Avatar, Input } from 'antd';
 import 'antd/dist/antd.css';
 
-export const FilterCustomer = ({ filterBy, customers, ...props }) => {
+export const FilterUseYn = ({ filterBy, ...props }) => {
   const onClick = value => {
     filterBy(value);
   };
@@ -22,23 +22,28 @@ export const FilterCustomer = ({ filterBy, customers, ...props }) => {
             verticalAlign: 'middle',
           }}
         >
-          고객명
+          사용
         </Avatar>
         <Select
-          id="customer"
+          id="use_yn"
           size="large"
-          style={{ width: '230px', marginRight: '40px' }}
+          style={{
+            width: '80px',
+            marginRight: '40px',
+            fontSize: 15,
+          }}
+          defaultValue="Y"
           onChange={onClick}
         >
-          <Select.Option key="customer_id" value="all">
+          <Select.Option key="use_yn" value="all">
             전체
           </Select.Option>
-
-          {customers.map(customer => (
-            <Select.Option key="customer_id" value={customer['name']}>
-              {customer['name']}
-            </Select.Option>
-          ))}
+          <Select.Option key="use_yn" value="Y">
+            Y
+          </Select.Option>
+          <Select.Option key="use_yn" value="N">
+            N
+          </Select.Option>
         </Select>
       </Input.Group>
     </>

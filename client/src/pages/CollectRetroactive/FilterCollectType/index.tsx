@@ -15,8 +15,11 @@ export const FilterCollectType = ({ filterBy, data, ...props }) => {
           size="large"
           style={{
             color: '#353A40',
+            backgroundColor: '#fafafa',
+            border: '1px solid #D9D9D9',
             fontSize: 15,
-            width: 65,
+            width: 70,
+            verticalAlign: 'middle',
           }}
         >
           수집방법

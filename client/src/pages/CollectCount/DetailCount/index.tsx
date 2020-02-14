@@ -291,7 +291,7 @@ function DetailCount(props: InjectedProps) {
     },
   ];
 
-  return <Table columns={columns} dataSource={resultData} bordered />;
+  return <Table size="small" columns={columns} dataSource={resultData} bordered />;
 }
 
 export default inject(STORES.VERIFY_STORE)(observer(DetailCount));
