@@ -1,6 +1,6 @@
 import * as express from 'express';
 
-import { getConnectionManager, IsNull } from 'typeorm';
+import { getConnectionManager } from 'typeorm';
 import { CollectData } from '../entities/CollectData';
 
 const router = express.Router();
@@ -77,7 +77,6 @@ router.post('/:kind/:customer_id/:channel', async (req, res) => {
 
     const customer_id = req.params.customer_id;
     const channel = req.params.channel;
-
     var datas = [];
 
     datas = await repository.find({

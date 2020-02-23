@@ -1,11 +1,5 @@
 import axios from 'axios';
 import { ApiResponse } from '~services/types';
-import { DetailDto } from './DataService';
-
-export type DetailCountDto = {
-  customer_id: string;
-  always_yn: string;
-};
 
 export type CountDto = {
   seq: number;
@@ -19,6 +13,7 @@ export type CountDto = {
   reg_dt: string;
 };
 
+// const API_HOST = process.env.API_HOST || "http://61.82.137.194:8000";
 const API_HOST = process.env.API_HOST || 'http://localhost:8000';
 
 class CountService {
@@ -27,9 +22,10 @@ class CountService {
   }
 
   async countDataByCustomerId(
-    body: DetailCountDto,
+    customer_id: string,
+    always_yn: string,
   ): Promise<ApiResponse<CountDto[]>> {
-    return axios.post(`${API_HOST}/count`, body);
+    return axios.post(`${API_HOST}/count/${customer_id}/${always_yn}`);
   }
 }
 

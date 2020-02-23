@@ -1,9 +1,8 @@
 import React from 'react';
 import { Menu, Dropdown, Icon } from 'antd';
-import './node_modules/antd/dist/antd.css';
 
-export const StatusFilter = ({ filterBy, ...props }) => {
-  const onClick = ({ key }) => {
+export const StatusFilter = ({ filterBy, ...props }: { filterBy: any }) => {
+  const onClick = ({ key }: { key: string }) => {
     filterBy(key);
   };
 

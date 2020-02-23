@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ApiResponse } from '~services/types';
 
-export type NodeDto = {
+export type RequestDto = {
   seq: number;
   customer_seq: number;
   channel_seq: number;
@@ -39,10 +39,11 @@ export type ProgressDto = {
   upd_dt: string;
 };
 
+// const API_HOST = process.env.API_HOST || "http://61.82.137.194:8000";
 const API_HOST = process.env.API_HOST || 'http://localhost:8000';
 
 class NodeService {
-  async nodeData(kind: string): Promise<ApiResponse<NodeDto[]>> {
+  async nodeData(kind: string): Promise<ApiResponse<RequestDto[]>> {
     return axios.post(`${API_HOST}/node/${kind}`);
   }
 

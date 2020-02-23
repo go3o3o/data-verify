@@ -1,4 +1,5 @@
-import 'bootstrap/dist/css/bootstrap.css';
+import './css/style.css';
+// import "bootstrap/dist/css/bootstrap.css";
 import 'moment/locale/ko';
 
 import React from 'react';

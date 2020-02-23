@@ -8,6 +8,9 @@ import {
 import { observer, inject } from 'mobx-react';
 import autobind from 'autobind-decorator';
 
+import 'bootstrap/dist/css/bootstrap.css';
+import '~css/style.css';
+
 import { STORES, PAGE_PATHS } from '~constants';
 import CollectCount from '~pages/CollectCount';
 import NodeCollector from '~pages/NodeCollector';
@@ -25,29 +28,45 @@ export default class App extends Component {
     return (
       <Router>
         <Switch>
-          <Route path={`${PAGE_PATHS.NODE}/:kind`} component={NodeCollector} />
+          <Route
+            path={`${PAGE_PATHS.NODE}/:kind/:collapsed`}
+            component={NodeCollector}
+          />
           <Route
             path={`${PAGE_PATHS.NODE}/:kind/:request_seq`}
             component={NodeCollector}
           />
 
-          <Route path={`${PAGE_PATHS.DMAP}/:kind`} component={DmapCollector} />
-
-          <Route path={`${PAGE_PATHS.COUNT}`} component={CollectCount} />
           <Route
-            path={`${PAGE_PATHS.COUNT}/:customer_id`}
+            path={`${PAGE_PATHS.DMAP}/:kind/:collapsed`}
+            component={DmapCollector}
+          />
+          <Route
+            path={`${PAGE_PATHS.DMAP}/:kind/:project_seq`}
+            component={DmapCollector}
+          />
+
+          <Route
+            path={`${PAGE_PATHS.COUNT}/:collapsed`}
+            component={CollectCount}
+          />
+          <Route
+            path={`${PAGE_PATHS.COUNT}/:customer_id/:always_yn`}
             component={CollectCount}
           />
 
           {/* <Route path={`${PAGE_PATHS.DATA}/always`} component={CollectAlways} /> */}
-          <Route path={`${PAGE_PATHS.DATA}/always`} component={CollectAlways} />
+          <Route
+            path={`${PAGE_PATHS.DATA}/always/:collapsed`}
+            component={CollectAlways}
+          />
           <Route
             path={`${PAGE_PATHS.DATA}/always/:customer_id/:channel`}
             component={CollectAlways}
           />
 
           <Route
-            path={`${PAGE_PATHS.DATA}/retroactive`}
+            path={`${PAGE_PATHS.DATA}/retroactive/:collapsed`}
             component={CollectRetroactive}
           />
           <Route
@@ -59,7 +78,7 @@ export default class App extends Component {
             component={CollectRetroactive}
           />
 
-          <Redirect from="/" to={`${PAGE_PATHS.NODE}/nodeStatus`} />
+          <Redirect from="/" to={`${PAGE_PATHS.NODE}/nodeStatus/false`} />
         </Switch>
       </Router>
     );

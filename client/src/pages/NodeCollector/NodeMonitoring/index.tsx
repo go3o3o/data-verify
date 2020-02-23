@@ -16,7 +16,7 @@ class NodeMonitoring extends Component<InjectedProps> {
   constructor(props: any) {
     super(props);
 
-    this.props.monitoringData.map(md => {
+    this.props.monitoringData.map((md: object) => {
       md['filterCustomer'] = true;
       md['filterStatus'] = true;
     });
@@ -26,15 +26,15 @@ class NodeMonitoring extends Component<InjectedProps> {
     };
   }
 
-  handleFilterStatus = value => {
+  handleFilterStatus = (value: string) => {
     var filteredEvents = [];
     if (value === 'all') {
-      filteredEvents = this.props.monitoringData.filter(data => {
+      filteredEvents = this.props.monitoringData.filter((data: any) => {
         data.filterStatus = true;
         return data.filterCustomer === true && data.filterStatus === true;
       });
     } else {
-      filteredEvents = this.props.monitoringData.filter(data => {
+      filteredEvents = this.props.monitoringData.filter((data: any) => {
         if (data.status === value) {
           data.filterStatus = true;
         } else {
@@ -49,15 +49,15 @@ class NodeMonitoring extends Component<InjectedProps> {
     });
   };
 
-  handleFilterCustomer = value => {
+  handleFilterCustomer = (value: string) => {
     var filteredEvents = [];
     if (value === 'all') {
-      filteredEvents = this.props.monitoringData.filter(data => {
+      filteredEvents = this.props.monitoringData.filter((data: any) => {
         data.filterCustomer = true;
         return data.filterCustomer === true && data.filterStatus === true;
       });
     } else {
-      filteredEvents = this.props.monitoringData.filter(data => {
+      filteredEvents = this.props.monitoringData.filter((data: any) => {
         if (data.customer_id === value) {
           data.filterCustomer = true;
         } else {
@@ -72,9 +72,17 @@ class NodeMonitoring extends Component<InjectedProps> {
     });
   };
 
-  handleSearch = searchText => {
+  handleSearch = (searchText: string) => {
     var filteredEvents = this.props.monitoringData.filter(
-      ({ channel, title, keyword }) => {
+      ({
+        channel,
+        title,
+        keyword,
+      }: {
+        channel: string;
+        title: string;
+        keyword: string;
+      }) => {
         // console.log(channel, title, keyword);
         if (keyword !== null) {
           return (

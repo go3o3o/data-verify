@@ -1,9 +1,15 @@
 import React from 'react';
 import { Select, Avatar, Input } from 'antd';
-import 'antd/dist/antd.css';
 
-export const FilterCollectType = ({ filterBy, data, ...props }) => {
-  const onClick = value => {
+export const FilterCollectType = ({
+  filterBy,
+  data,
+  ...props
+}: {
+  filterBy: any;
+  data: any;
+}) => {
+  const onClick = (value:string) => {
     filterBy('filterCollectType', 'collect_type_nm', value, data);
   };
 

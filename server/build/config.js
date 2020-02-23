@@ -4,7 +4,14 @@ require("reflect-metadata");
 const CollectData_1 = require("./entities/CollectData");
 const CollectCount_1 = require("./entities/CollectCount");
 const NodeRequest_1 = require("./entities/NodeRequest");
-const DmapRequest_1 = require("./entities/DmapRequest");
+const NodeCustomer_1 = require("./entities/NodeCustomer");
+const NodeChannel_1 = require("./entities/NodeChannel");
+const NodeProgress_1 = require("./entities/NodeProgress");
+const DmapProgress_1 = require("./entities/DmapProgress");
+const DmapProject_1 = require("./entities/DmapProject");
+const DmapDocCheck_1 = require("./entities/DmapDocCheck");
+const DmapSource_1 = require("./entities/DmapSource");
+const DmapCustomer_1 = require("./entities/DmapCustomer");
 exports.dbOptions = [
     {
         name: 'dmap',
@@ -14,7 +21,13 @@ exports.dbOptions = [
         username: 'wisenut',
         password: 'wisenut#12',
         database: 'dmap_base',
-        entities: [DmapRequest_1.DmapRequest],
+        entities: [
+            DmapProgress_1.DmapProgress,
+            DmapProject_1.DmapProject,
+            DmapDocCheck_1.DmapDocCheck,
+            DmapSource_1.DmapSource,
+            DmapCustomer_1.DmapCustomer,
+        ],
     },
     {
         name: 'node',
@@ -24,7 +37,7 @@ exports.dbOptions = [
         username: 'wisenut',
         password: 'wisenut#12',
         database: 'dmap_collector',
-        entities: [NodeRequest_1.NodeRequest],
+        entities: [NodeRequest_1.NodeRequest, NodeCustomer_1.NodeCustomer, NodeChannel_1.NodeChannel, NodeProgress_1.NodeProgress],
     },
     {
         name: 'verify',

@@ -3,12 +3,11 @@ import Async from 'react-async';
 
 import { Table, Spin, Button, Popover, Icon } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
-import 'antd/dist/antd.css';
 
 import DmapStore from '~stores/dmap/DmapStore';
 import { StatusTag } from './statusTag';
 
-const DmapTable = ({ eventsData }) => {
+const DmapTable = ({ eventsData }: { eventsData: any }) => {
   const tableColumns: ColumnProps<{}>[] = [
     {
       title: '번호',
@@ -126,11 +125,7 @@ const DmapTable = ({ eventsData }) => {
           return (
             <Popover content={content} title="BICA 정보" trigger="click">
               {/* <Button size="small" shape="circle" icon="check" /> */}
-              <Icon
-                type="heart"
-                theme="twoTone"
-                twoToneColor="#eb2f96"
-              />
+              <Icon type="heart" theme="twoTone" twoToneColor="#eb2f96" />
             </Popover>
           );
         }
@@ -177,7 +172,7 @@ const DmapTable = ({ eventsData }) => {
         title: '상태',
         dataIndex: 'state',
         key: 'state',
-        render: (text, record) => (
+        render: ( record: any) => (
           <StatusTag table="progress" status={record.state} />
         ),
       },

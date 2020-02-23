@@ -28,7 +28,7 @@ const requestProgressMap = {
   )
 };
 
-export const StatusTag = ({ table, status }) => {
+export const StatusTag = ({ table, status }:{table:any; status:string}) => {
   if (table === "request") {
     return requestStatusMap[status];
   } else if (table === "progress") {

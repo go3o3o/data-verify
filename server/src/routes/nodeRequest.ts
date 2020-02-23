@@ -82,7 +82,6 @@ router.post('/:kind', async (req, res) => {
 
     return res.json({ data: node });
   } catch (e) {
-    console.log(e);
     return res.status(500).json({ msg: e.message });
   }
 });

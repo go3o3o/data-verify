@@ -1,29 +1,53 @@
-import React, { useEffect } from 'react';
-
+import React, { useEffect, useState } from 'react';
 import { inject, observer } from 'mobx-react';
 
-import { Table } from 'antd';
-import 'antd/dist/antd.css';
+import { Table, Form } from 'antd';
 
 import { STORES } from '~constants';
-import VerifyStore from '~stores/verify/VerifyStore';
+
+import { FilterSearch } from '../FilterSearch';
+import { FilterCollectType } from '../FilterCollectType';
+import { AnyARecord } from 'dns';
 
 type InjectedProps = {
-  verifyStore: VerifyStore;
-  customer_id: string;
+  countDataByCustomerId: any;
   always_yn: string;
 };
 
 function DetailCount(props: InjectedProps) {
-  useEffect(() => {
-    props.verifyStore.setCustomerId(props.customer_id);
-    props.verifyStore.setAlwaysYn(props.always_yn);
-    props.verifyStore.countDataByCustomerId();
-  }, []);
+  const [countDataByCustomerId, setCountDataByCustomerId] = useState(
+    props.countDataByCustomerId,
+  );
 
-  const { customerCount } = props.verifyStore;
+  var handleSearch = (searchText: string) => {
+    var filteredEvents = props.countDataByCustomerId.filter(
+      ({ channel }: { channel: string }) => {
+        return channel.includes(searchText);
+      },
+    );
+    setCountDataByCustomerId(filteredEvents);
+  };
 
-  const today = new Date('2020-01-14');
+  var handleCollectType = (value: string) => {
+    if (value === '디맵수집기') {
+      var filteredEvents = props.countDataByCustomerId.filter(
+        ({ collect_type }: { collect_type: string }) => {
+          return collect_type === '0';
+        },
+      );
+    } else if (value === '신규수집기') {
+      var filteredEvents = props.countDataByCustomerId.filter(
+        ({ collect_type }: { collect_type: string }) => {
+          return collect_type === '1';
+        },
+      );
+    } else if (value === '전체') {
+      var filteredEvents = props.countDataByCustomerId;
+    }
+    setCountDataByCustomerId(filteredEvents);
+  };
+
+  const today = new Date();
 
   const theYear = today.getFullYear();
   const theMonth = today.getMonth();
@@ -32,6 +56,7 @@ function DetailCount(props: InjectedProps) {
   var weeks: string[] = [];
   var retroWeeks: string[] = [];
 
+  // Table Header 부분의 날짜 파싱: 상시수집 데이터 - 일주일, 소급수집 데이터 - 7분기
   if (props.always_yn === 'Y') {
     for (var i = 0; i < 7; i++) {
       var resultDay = new Date(theYear, theMonth, theDate - i);
@@ -67,15 +92,14 @@ function DetailCount(props: InjectedProps) {
     }
   }
 
-  console.log(retroWeeks);
-
   var parsingCheck = new Set();
   var resultCheck = new Set();
-  customerCount.map(c => {
+  countDataByCustomerId.map((c: any) => {
     parsingCheck.add(`${c.channel}&&${c.keyword}`);
     resultCheck.add(c.channel);
   });
 
+  // mother row 만들기
   var parseData: any[] = [];
   if (props.always_yn === 'Y') {
     parsingCheck.forEach(pc => {
@@ -91,8 +115,11 @@ function DetailCount(props: InjectedProps) {
       var count5 = 0;
       var count6 = 0;
 
-      customerCount.map(c => {
-        if (checkChannel === c.channel && checkKeyword === c.keyword) {
+      countDataByCustomerId.map((c: any) => {
+        if (
+          checkChannel === c.channel &&
+          (checkKeyword === 'null' ? true : checkKeyword === c.keyword)
+        ) {
           // console.log(checkChannel, checkKeyword, c.doc_datetime);
           parseJson['seq'] = c.seq;
           parseJson['channel'] = c.channel;
@@ -137,8 +164,11 @@ function DetailCount(props: InjectedProps) {
       var count5 = 0;
       var count6 = 0;
 
-      customerCount.map(c => {
-        if (checkChannel === c.channel && checkKeyword === c.keyword) {
+      countDataByCustomerId.map((c: any) => {
+        if (
+          checkChannel === c.channel &&
+          (checkKeyword === 'null' ? true : checkKeyword === c.keyword)
+        ) {
           parseJson['seq'] = c.seq;
           parseJson['channel'] = c.channel;
           parseJson['keyword'] = c.keyword;
@@ -195,6 +225,7 @@ function DetailCount(props: InjectedProps) {
   var resultJson = {};
   var childData: any[] = [];
   var childJson = {};
+  // mother row 에 맞는 child row 붙이기
   resultCheck.forEach(rc => {
     var motherChannel = rc;
     childData = [];
@@ -291,7 +322,19 @@ function DetailCount(props: InjectedProps) {
     },
   ];
 
-  return <Table size="small" columns={columns} dataSource={resultData} bordered />;
+  return (
+    <>
+      <Form layout="inline" style={{ textAlign: 'left', marginBottom: 10 }}>
+        <Form.Item>
+          <FilterCollectType filterBy={handleCollectType} />
+        </Form.Item>
+        <Form.Item>
+          <FilterSearch onSearch={handleSearch} />
+        </Form.Item>
+      </Form>
+      <Table size="small" columns={columns} dataSource={resultData} bordered />
+    </>
+  );
 }
 
 export default inject(STORES.VERIFY_STORE)(observer(DetailCount));
