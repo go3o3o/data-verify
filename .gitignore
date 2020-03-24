@@ -1,6 +1,9 @@
 server/src/config.ts
-client/src/assets/config.ts
+
+client/src/assets/
 
 node_module/
 client/.cache/
 server/build/
+
+.DS_Store
