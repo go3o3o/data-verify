@@ -21,6 +21,14 @@ export type RequestDto = {
   upd_dt: string;
 };
 
+export type UpdateRequestDto = {
+  seq: number;
+  keyword: string;
+  start_dt: string;
+  end_dt: string;
+  status: string;
+};
+
 export type CustomerDto = {
   seq: number;
   name: string;
@@ -56,7 +64,18 @@ class NodeService {
   ): Promise<ApiResponse<ProgressDto[]>> {
     return axios.post(`${API_HOST}/node/nodeProgress/${request_seq}`);
   }
-  //customer_id, progress count
+
+  async deleteRequest(request_seq: number) {
+    return axios.delete(`${API_HOST}/node/${request_seq}`);
+  }
+
+  async deleteProgress(progress_seq: number) {
+    return axios.delete(`${API_HOST}/node/${progress_seq}`);
+  }
+
+  async updateRequest(body: UpdateRequestDto) {
+    return axios.patch(`${API_HOST}/node`, body);
+  }
 }
 
 export default NodeService;

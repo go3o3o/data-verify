@@ -1,6 +1,9 @@
 import { action, observable } from 'mobx';
 import autobind from 'autobind-decorator';
-import NodeService, { RequestDto } from '~services/NodeService';
+import NodeService, {
+  RequestDto,
+  UpdateRequestDto,
+} from '~services/NodeService';
 
 @autobind
 class NodeStore {
@@ -19,6 +22,21 @@ class NodeStore {
   async nodeDetailData(request_seq: number) {
     const nodeDetailData = await this.nodeService.nodeDetailData(request_seq);
     return nodeDetailData;
+  }
+
+  @action
+  async deleteRequest(request_seq: number) {
+    await this.nodeService.deleteRequest(request_seq);
+  }
+
+  @action
+  async deleteProgress(progress_seq: number) {
+    await this.nodeService.deleteRequest(progress_seq);
+  }
+
+  @action
+  async updateRequest(body: UpdateRequestDto) {
+    await this.nodeService.updateRequest(body);
   }
 
   @action

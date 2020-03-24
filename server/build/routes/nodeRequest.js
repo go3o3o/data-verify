@@ -71,7 +71,6 @@ router.post('/:kind', async (req, res) => {
         return res.json({ data: node });
     }
     catch (e) {
-        console.log(e);
         return res.status(500).json({ msg: e.message });
     }
 });
@@ -91,5 +90,24 @@ router.post('/:kind/:request_seq', async (req, res) => {
     catch (e) {
         return res.status(500).json({ msg: e.message });
     }
+});
+router.delete('/:request_seq', async (req, res) => {
+    const seq = req.params.request_seq;
+    try {
+        const manager = typeorm_1.getConnectionManager().get('node');
+        const repository = manager.getRepository(NodeRequest_1.NodeRequest).createQueryBuilder();
+        await repository
+            .delete()
+            .where('seq = :seq', { seq: seq })
+            .execute();
+        return res.json({ msg: 'OK' });
+    }
+    catch (e) {
+        return res.status(500).json({ msg: e.message });
+    }
+});
+router.patch('', async (req, res) => {
+    const request = req.body;
+    console.log('router.patch');
 });
 exports.default = router;

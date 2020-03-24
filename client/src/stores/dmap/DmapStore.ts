@@ -1,6 +1,6 @@
 import { action, observable, reaction } from 'mobx';
 import autobind from 'autobind-decorator';
-import DmapService, { ProjectDto } from '~services/DmapService';
+import DmapService, { ProjectDto, CrawlQueueDto } from '~services/DmapService';
 
 @autobind
 class DmapStore {
@@ -28,6 +28,21 @@ class DmapStore {
     const docCheckData = await this.dmapService.docCheckData(project_seq);
     return docCheckData;
   }
+
+  @action
+  async crawlQueueData() {
+    const crawlQueueData = await this.dmapService.crawlQueueData();
+    const source = await this.dmapService.getSource();
+    return { crawlQueueData, source };
+  }
+
+  @action
+  async deleteCrawlQueue(queue_seq: number) {
+    await this.dmapService.deleteCrawlQueue(queue_seq);
+  }
+
+  @action
+  async updateCrawlQueue(queue: CrawlQueueDto[]) {}
 
   @action
   setDmap(dmap: ProjectDto[]) {

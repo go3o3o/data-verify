@@ -98,6 +98,14 @@ class SideBar extends Component<MenuFilterProps> {
                 </span>
               }
             >
+              <Menu.Item key="dmapQueue">
+                <Link
+                  key="dmapQueue"
+                  to={`${PAGE_PATHS.DMAP}/dmapQueue/${this.state['collapsed']}`}
+                >
+                  수집요청
+                </Link>
+              </Menu.Item>
               <Menu.Item key="dmapStatus">
                 <Link
                   key="dmapStatus"

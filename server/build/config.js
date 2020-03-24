@@ -12,6 +12,8 @@ const DmapProject_1 = require("./entities/DmapProject");
 const DmapDocCheck_1 = require("./entities/DmapDocCheck");
 const DmapSource_1 = require("./entities/DmapSource");
 const DmapCustomer_1 = require("./entities/DmapCustomer");
+const DmapProjectKeyword_1 = require("./entities/DmapProjectKeyword");
+const DmapCrawlQueue_1 = require("./entities/DmapCrawlQueue");
 exports.dbOptions = [
     {
         name: 'dmap',
@@ -27,6 +29,8 @@ exports.dbOptions = [
             DmapDocCheck_1.DmapDocCheck,
             DmapSource_1.DmapSource,
             DmapCustomer_1.DmapCustomer,
+            DmapProjectKeyword_1.DmapProjectKeyword,
+            DmapCrawlQueue_1.DmapCrawlQueue,
         ],
     },
     {

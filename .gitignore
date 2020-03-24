@@ -1,2 +1,6 @@
 server/src/config.ts
 client/src/assets/config.ts
+
+node_module/
+client/.cache/
+server/public/

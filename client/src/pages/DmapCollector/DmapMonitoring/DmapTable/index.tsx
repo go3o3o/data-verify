@@ -8,7 +8,7 @@ import DmapStore from '~stores/dmap/DmapStore';
 import { StatusTag } from './statusTag';
 
 const DmapTable = ({ eventsData }: { eventsData: any }) => {
-  const tableColumns: ColumnProps<{}>[] = [
+  const columns: ColumnProps<{}>[] = [
     {
       title: '번호',
       dataIndex: 'seq',
@@ -136,7 +136,7 @@ const DmapTable = ({ eventsData }: { eventsData: any }) => {
   const loadDmapDetailData = (project_seq: number) => {
     const dmapStore = new DmapStore();
     return dmapStore.dmapDetailData(project_seq).then(res => {
-      return res.data;
+      return res.data.data;
     });
   };
 
@@ -172,9 +172,7 @@ const DmapTable = ({ eventsData }: { eventsData: any }) => {
         title: '상태',
         dataIndex: 'state',
         key: 'state',
-        render: ( record: any) => (
-          <StatusTag table="progress" status={record.state} />
-        ),
+        render: (record: any) => <StatusTag table="progress" status={record} />,
       },
     ];
 
@@ -186,10 +184,8 @@ const DmapTable = ({ eventsData }: { eventsData: any }) => {
           </div>
         </Async.Loading>
         <Async.Resolved>
-          {data => {
-            return (
-              <Table size="small" columns={columns} dataSource={data['data']} />
-            );
+          {(data: object[]) => {
+            return <Table size="small" columns={columns} dataSource={data} />;
           }}
         </Async.Resolved>
       </Async>
@@ -199,7 +195,7 @@ const DmapTable = ({ eventsData }: { eventsData: any }) => {
   return (
     <Table
       className="components-table-demo-nested"
-      columns={tableColumns}
+      columns={columns}
       dataSource={eventsData}
       expandedRowRender={expandedRowRender}
       // scroll={{ x: 1500, y: 300 }}

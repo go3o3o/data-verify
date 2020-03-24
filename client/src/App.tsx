@@ -36,6 +36,15 @@ export default class App extends Component {
             path={`${PAGE_PATHS.NODE}/:kind/:request_seq`}
             component={NodeCollector}
           />
+          <Route
+            path={`${PAGE_PATHS.NODE}/:request_seq`}
+            component={NodeCollector}
+          />
+          <Route
+            path={`${PAGE_PATHS.NODE}/:progress_seq`}
+            component={NodeCollector}
+          />
+          <Route path={`${PAGE_PATHS.NODE}/`} component={NodeCollector} />
 
           <Route
             path={`${PAGE_PATHS.DMAP}/:kind/:collapsed`}
@@ -45,6 +54,11 @@ export default class App extends Component {
             path={`${PAGE_PATHS.DMAP}/:kind/:project_seq`}
             component={DmapCollector}
           />
+          <Route
+            path={`${PAGE_PATHS.DMAP}/:queue_seq`}
+            component={DmapCollector}
+          />
+          <Route path={PAGE_PATHS.DMAP} component={NodeCollector} />
 
           <Route
             path={`${PAGE_PATHS.COUNT}/:collapsed`}

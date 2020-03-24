@@ -116,28 +116,28 @@ function DetailCount(props: InjectedProps) {
       var count6 = 0;
 
       countDataByCustomerId.map((c: any) => {
+        // console.log(c); //{count: "3", seq: 1245763, channel: "디시인사이드", doc_datetime: "2020-02-24", collect_type: "1", …}
         if (
           checkChannel === c.channel &&
           (checkKeyword === 'null' ? true : checkKeyword === c.keyword)
         ) {
-          // console.log(checkChannel, checkKeyword, c.doc_datetime);
           parseJson['seq'] = c.seq;
           parseJson['channel'] = c.channel;
           parseJson['keyword'] = c.keyword;
           if (weeks[0] === c.doc_datetime) {
-            count0 = Number(c.count);
+            count0 += Number(c.count);
           } else if (weeks[1] === c.doc_datetime) {
-            count1 = Number(c.count);
+            count1 += Number(c.count);
           } else if (weeks[2] === c.doc_datetime) {
-            count2 = Number(c.count);
+            count2 += Number(c.count);
           } else if (weeks[3] === c.doc_datetime) {
-            count3 = Number(c.count);
+            count3 += Number(c.count);
           } else if (weeks[4] === c.doc_datetime) {
-            count4 = Number(c.count);
+            count4 += Number(c.count);
           } else if (weeks[5] === c.doc_datetime) {
-            count5 = Number(c.count);
+            count5 += Number(c.count);
           } else if (weeks[6] === c.doc_datetime) {
-            count6 = Number(c.count);
+            count6 += Number(c.count);
           }
           parseJson[weeks[0]] = count0;
           parseJson[weeks[1]] = count1;
@@ -165,6 +165,7 @@ function DetailCount(props: InjectedProps) {
       var count6 = 0;
 
       countDataByCustomerId.map((c: any) => {
+        console.log(c); // {count: "838", seq: 1253222, channel: "네이버 블로그", doc_datetime: "2020-01-29", collect_type: "1", …}
         if (
           checkChannel === c.channel &&
           (checkKeyword === 'null' ? true : checkKeyword === c.keyword)
@@ -176,37 +177,37 @@ function DetailCount(props: InjectedProps) {
             retroWeeks[1] < c.doc_datetime &&
             retroWeeks[0] >= c.doc_datetime
           ) {
-            count0 = Number(c.count);
+            count0 += Number(c.count);
           } else if (
             retroWeeks[2] < c.doc_datetime &&
             retroWeeks[1] >= c.doc_datetime
           ) {
-            count1 = Number(c.count);
+            count1 += Number(c.count);
           } else if (
             retroWeeks[3] < c.doc_datetime &&
             retroWeeks[2] >= c.doc_datetime
           ) {
-            count2 = Number(c.count);
+            count2 += Number(c.count);
           } else if (
             retroWeeks[4] < c.doc_datetime &&
             retroWeeks[3] >= c.doc_datetime
           ) {
-            count3 = Number(c.count);
+            count3 += Number(c.count);
           } else if (
             retroWeeks[5] <= c.doc_datetime &&
             retroWeeks[4] > c.doc_datetime
           ) {
-            count4 = Number(c.count);
+            count4 += Number(c.count);
           } else if (
             retroWeeks[6] <= c.doc_datetime &&
             retroWeeks[5] > c.doc_datetime
           ) {
-            count5 = Number(c.count);
+            count5 += Number(c.count);
           } else if (
             retroWeeks[7] <= c.doc_datetime &&
             retroWeeks[6] > c.doc_datetime
           ) {
-            count6 = Number(c.count);
+            count6 += Number(c.count);
           }
           parseJson[weeks[0]] = count0;
           parseJson[weeks[1]] = count1;

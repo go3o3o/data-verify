@@ -32,14 +32,19 @@ export type ProgressDto = {
 };
 
 export type DocCheckDto = {
-  seq: number;
-  project_seq: number;
-  keyword_seq: number;
   pub_day: string;
-  pub_day_date: string;
-  url: string;
-  md5: string;
-  reg_dt: string;
+  keyword: string;
+  cnt: number;
+};
+
+export type CrawlQueueDto = {
+  seq: number;
+  name: string;
+  depth1_seq: number;
+  depth2_seq: number;
+  depth3_seq: number;
+  start_dt: string;
+  end_dt: string;
 };
 
 export type ChannelDto = {
@@ -86,6 +91,16 @@ class DmapService {
   async docCheckData(project_seq: number): Promise<ApiResponse<DocCheckDto[]>> {
     return axios.post(`${API_HOST}/dmap/dmapStatus/${project_seq}`);
   }
+
+  async crawlQueueData(): Promise<ApiResponse<CrawlQueueDto[]>> {
+    return axios.post(`${API_HOST}/dmap/dmapQueue`);
+  }
+
+  async deleteCrawlQueue(queue_seq: number) {
+    return axios.delete(`${API_HOST}/dmap/${queue_seq}`);
+  }
+
+  async updateCrawlQueue() {}
 }
 
 export default DmapService;
