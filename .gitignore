@@ -1,8 +1,10 @@
 server/src/config.ts
-
 client/src/assets/
 
-node_module/
+node_modules/
+client/node_modules/
+server/node_modules/
+
 client/.cache/
 server/build/
 
