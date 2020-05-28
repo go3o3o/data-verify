@@ -68,7 +68,6 @@ export type StatusDto = {
   cnt: number;
 };
 
-// const API_HOST = process.env.API_HOST || 'http://61.82.137.194:8000';
 const API_HOST = process.env.API_HOST || 'http://localhost:8000';
 
 class DmapService {
@@ -100,7 +99,9 @@ class DmapService {
     return axios.delete(`${API_HOST}/dmap/${queue_seq}`);
   }
 
-  async updateCrawlQueue() {}
+  async updateCrawlQueue(queue: CrawlQueueDto) {
+    return axios.put(`${API_HOST}/dmap/`, queue);
+  }
 }
 
 export default DmapService;

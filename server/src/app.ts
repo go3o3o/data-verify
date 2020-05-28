@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as express from 'express';
 import * as http from 'http';
-// import * as cors from 'cors';
+import * as cors from 'cors';
 
 import { createConnection, createConnections } from 'typeorm';
 
@@ -23,7 +23,7 @@ async function runServer() {
   const app = express();
 
   app.use(express.json());
-  // app.use(cors());
+  app.use(cors());
   app.use(express.static(path.join(__dirname, 'public')));
   app.use('/dmap', dmapRequestRouter);
   app.use('/node', nodeRequestRouter);

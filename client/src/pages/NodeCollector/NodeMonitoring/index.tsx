@@ -73,28 +73,25 @@ class NodeMonitoring extends Component<InjectedProps> {
   };
 
   handleSearch = (searchText: string) => {
-    var filteredEvents = this.props.monitoringData.filter(
-      ({
-        channel,
-        title,
-        keyword,
-      }: {
-        channel: string;
-        title: string;
-        keyword: string;
-      }) => {
-        // console.log(channel, title, keyword);
-        if (keyword !== null) {
-          return (
-            channel.includes(searchText) ||
-            title.includes(searchText) ||
-            keyword.includes(searchText)
-          );
-        } else {
-          return channel.includes(searchText) || title.includes(searchText);
-        }
-      },
-    );
+    var filteredEvents = this.props.monitoringData.filter((data: any) => {
+      // console.log(channel, title, keyword);
+      if (data.keyword !== null) {
+        return (
+          (data.channel.includes(searchText) ||
+            data.title.includes(searchText) ||
+            data.keyword.includes(searchText)) &&
+          data.filterCustomer === true &&
+          data.filterStatus === true
+        );
+      } else {
+        return (
+          (data.channel.includes(searchText) ||
+            data.title.includes(searchText)) &&
+          data.filterCustomer === true &&
+          data.filterStatus === true
+        );
+      }
+    });
 
     this.setState({
       node: filteredEvents,

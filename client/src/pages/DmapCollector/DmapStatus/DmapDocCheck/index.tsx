@@ -1,4 +1,4 @@
-import React, { PureComponent, Component } from 'react';
+import React, { Component } from 'react';
 import { Async } from 'react-async';
 import {
   BarChart,
@@ -10,8 +10,6 @@ import {
   Legend,
   ResponsiveContainer,
   Brush,
-  Line,
-  ComposedChart,
 } from 'recharts';
 import moment from 'moment';
 import { Spin, DatePicker } from 'antd';
@@ -36,7 +34,6 @@ class DmapDocCheck extends Component<InjectedProps> {
   }
 
   shouldComponentUpdate(nextProps: any, nextState: any) {
-    console.log(nextState.startIndex, nextState.endIndex);
     if (
       this.props.project.seq !== nextProps.project.seq ||
       ((this.state['startIndex'] !== nextState.startIndex ||
@@ -159,6 +156,7 @@ class DmapDocCheck extends Component<InjectedProps> {
           </Async.Loading>
           <Async.Resolved>
             {(cnt: any[]) => {
+              console.log(moment(this.state['startDate']));
               return (
                 <>
                   {cnt.length > 0 ? (
@@ -196,7 +194,8 @@ class DmapDocCheck extends Component<InjectedProps> {
                           <CartesianGrid strokeDasharray="3 3" />
                           <XAxis dataKey="pub_day" />
                           <YAxis />
-                          <Tooltip content={this.Tooltip} />
+                          {/* <Tooltip content={this.Tooltip} /> */}
+                          <Tooltip />
                           <Legend />
                           {this.state['keywordSet'].map((keyword: string) => (
                             <Bar

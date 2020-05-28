@@ -1,7 +1,9 @@
-import React, { Component, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Async from 'react-async';
 import axios from 'axios';
 import moment from 'moment';
+
+import DateFnsUtils from '@date-io/date-fns';
 
 import {
   message,
@@ -13,39 +15,56 @@ import {
   Tooltip,
   Modal,
 } from 'antd';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
 
 import DmapStore from '~stores/dmap/DmapStore';
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 
 function DmapQueue() {
   const [queue, setQueue] = useState({});
   const [modal, setModal] = useState(false);
   const [msg, setMsg] = useState('');
-  const [age, setAge] = React.useState('');
+  const [queueEndDt, setQueueEndDt] = useState('');
+  const [queueStartDt, setQueueStartDt] = useState('');
+
+  // msg 초기화
+  useEffect(() => {
+    setMsg('');
+  });
 
   const deleteClick = (record: any) => {
     const seq = record.seq;
     const dmapStore = new DmapStore();
     dmapStore.deleteCrawlQueue(seq);
-    message.success('Delete Queue Success');
+    message.success({ content: 'DELETE Queue Success!', key, duration: 2 });
+    setTimeout(() => {
+      setMsg('DELETE SUCCESS');
+    }, 1000);
   };
 
   const editClick = (record: any) => {
     setQueue(record);
+    setQueueStartDt(moment(record['start_dt']).format('YYYY-MM-DD'));
+    setQueueEndDt(moment(record['end_dt']).format('YYYY-MM-DD'));
     setModal(!modal);
   };
 
   const key = 'updatable';
-  if (msg === 'SUCCESS') {
-    message.success({ content: 'Insert Queue Success!', key, duration: 1 });
+  if (msg === 'INSERT SUCCESS') {
+  } else if (msg === 'INSERT ERROR') {
+    setTimeout(() => {
+      setMsg('');
+    }, 2000);
+  } else if (msg === 'DELETE SUCCESS') {
   }
 
   const crawlStartClick = (record: any) => {
     const seq = record.seq;
+    // console.log(seq);
+
     // 수집시작일과 수집종료일 사이의 일자 수 구하기
     const startDt =
       new Date(moment(record.start_dt).format('YYYY-MM-DD')).getTime() /
@@ -59,17 +78,35 @@ function DmapQueue() {
       60 /
       60 /
       24;
-    // INSERT 하는데 대략 (일자 수 / 10) 정도의 초가 걸림
+    // INSERT 하는데 대략 (일자 수 / 10) 초가 걸림
     const delay = Math.ceil((endDt - startDt) / 10);
+    const url = 'http://211.39.140.72:8282/crawl';
+
     axios
-      .get('http://localhost:8282/crawl', {
-        params: {
-          seq: seq,
-        },
-      })
+      .post(url, { params: { seq: seq } })
       .then(res => {
-        console.log(res.data.Result);
-        setMsg(res.data.Result);
+        // console.log(res.data.Result);
+        if (res.data.Result === 'SUCCESS') {
+          message.success({
+            content: 'Insert Queue Success!',
+            key,
+            duration: 1,
+          });
+          setTimeout(() => {
+            setMsg('INSERT SUCCESS');
+          }, 1000);
+        } else if (res.data.Result === 'ERROR') {
+          message.error({ content: 'Insert Queue Fail!', key, duration: 1 });
+          setTimeout(() => {
+            setMsg('INSERT ERROR');
+          }, 1000);
+        }
+      })
+      .catch(e => {
+        message.error({ content: 'Insert Queue Fail!', key, duration: 1 });
+        setTimeout(() => {
+          setMsg('INSERT ERROR');
+        }, 1000);
       });
     message.loading({
       content: 'Inserting. Wait....',
@@ -79,18 +116,18 @@ function DmapQueue() {
   };
 
   const handleOk = () => {
-    var dmapStore = new DmapStore();
+    queue['start_dt'] = moment(queueStartDt).format('YYYYMMDD');
+    queue['end_dt'] = moment(queueEndDt).format('YYYYMMDD');
+
     // update queue
+    var dmapStore = new DmapStore();
+    dmapStore.updateCrawlQueue(queue);
 
     setModal(!modal);
   };
 
   const handleCancel = () => {
     setModal(!modal);
-  };
-
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setAge(event.target.value as string);
   };
 
   const columns = [
@@ -163,6 +200,25 @@ function DmapQueue() {
     });
   };
 
+  const handleStartDtChange = (
+    date: MaterialUiPickersDate,
+    value?: string | null,
+  ) => {
+    if (value !== null) {
+      const start_dt = moment(value).format('YYYYMMDD');
+      setQueueStartDt(value);
+    }
+  };
+  const handleEndDtChange = (
+    date: MaterialUiPickersDate,
+    value?: string | null,
+  ) => {
+    if (value !== null) {
+      const end_dt = moment(value).format('YYYYMMDD');
+      setQueueEndDt(value);
+    }
+  };
+
   return (
     <>
       <Async promiseFn={loadCrawlQueueData}>
@@ -183,20 +239,36 @@ function DmapQueue() {
         visible={modal}
         onOk={handleOk}
         onCancel={handleCancel}
+        bodyStyle={{ textAlign: 'center' }}
       >
-        <FormControl>
-          <InputLabel id="demo-simple-select-label">Age</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={age}
-            onChange={handleChange}
-          >
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
-          </Select>
-        </FormControl>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <KeyboardDatePicker
+            disableToolbar
+            variant="inline"
+            format="yyyy-MM-dd"
+            margin="normal"
+            id="date-picker-inline"
+            label="수집시작일"
+            value={queueStartDt}
+            onChange={handleStartDtChange}
+            KeyboardButtonProps={{
+              'aria-label': 'change date',
+            }}
+          />
+          <KeyboardDatePicker
+            disableToolbar
+            variant="inline"
+            format="yyyy-MM-dd"
+            margin="normal"
+            id="date-picker-inline"
+            label="수집종료일"
+            value={queueEndDt}
+            onChange={handleEndDtChange}
+            KeyboardButtonProps={{
+              'aria-label': 'change date',
+            }}
+          />
+        </MuiPickersUtilsProvider>
       </Modal>
     </>
   );

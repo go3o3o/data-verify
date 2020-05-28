@@ -14,17 +14,15 @@ type InjectedProps = {
 const region = config.region;
 const accessKeyId = config.access_key_id;
 const secretAccessKey = config.secret_access_key;
+aws.config.update({
+  region: region,
+  accessKeyId: accessKeyId,
+  secretAccessKey: secretAccessKey,
+});
 
 class AwsSqs extends Component<InjectedProps> {
   constructor(props: any) {
     super(props);
-
-    aws.config.update({
-      region: region,
-      accessKeyId: accessKeyId,
-      secretAccessKey: secretAccessKey,
-    });
-
     this.loadSqsList = this.loadSqsList.bind(this);
   }
 
@@ -44,10 +42,13 @@ class AwsSqs extends Component<InjectedProps> {
       QueueNamePrefix: 'dmap',
     };
     var queueList: object[] = [];
+    console.log(aws.config);
     sqs.listQueues(params, function(data: any) {
       var json = {};
+      console.log(data);
       if (data.QueueUrls !== undefined) {
         data.QueueUrls.forEach((queueUrl: string) => {
+          console.log(queueUrl);
           const urlParams = { QueueUrl: queueUrl, AttributeNames: ['All'] };
           var json = {};
           sqs.getQueueAttributes(urlParams, function(data: any) {
@@ -121,7 +122,7 @@ class AwsSqs extends Component<InjectedProps> {
               />
             );
           }}
-        </Async.Resolved>
+         </Async.Resolved> 
       </Async>
     );
   }
