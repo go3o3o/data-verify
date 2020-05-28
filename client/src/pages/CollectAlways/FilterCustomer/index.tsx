@@ -11,7 +11,7 @@ export const FilterCustomer = ({
   data: any;
   customers: any;
 }) => {
-  const onClick = (value:string) => {
+  const onClick = (value: string) => {
     filterBy('filterCustomer', 'customer_id', value, data);
   };
   return (
@@ -32,6 +32,7 @@ export const FilterCustomer = ({
           고객명
         </Avatar>
         <Select
+          showSearch
           id="customer"
           size="large"
           style={{ width: '230px', marginRight: '40px' }}
@@ -41,7 +42,7 @@ export const FilterCustomer = ({
             전체
           </Select.Option>
 
-          {customers.map((customer:object) => (
+          {customers.map((customer: object) => (
             <Select.Option key="customer_id" value={customer['customer_id']}>
               {customer['customer_id']}
             </Select.Option>

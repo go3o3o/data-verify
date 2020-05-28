@@ -40,16 +40,10 @@ function NodeStatus(props: InjectedProps) {
   var customer_arr: object[] = [];
   var json = {};
   props.statusData.map((data: any) => {
-    // customer_set<>: customer 중복 제거해서 set에 담기
     if (customer_set.has(data.name)) {
-      // { name: customer, [complete: 0, working: 0, error: 0] }
       json[data.status] = data.cnt;
     } else {
-      // { name: customer }
       customer_set.add(data.name);
-      json = {};
-      json['name'] = data.name;
-      json[data.status] = data.cnt;
       if (Object.keys(json).length !== 0) {
         customer_arr.push(json);
       }
@@ -77,12 +71,12 @@ function NodeStatus(props: InjectedProps) {
           }}
         >
           고객별 수집 현황
-          <a id="progress" onClick={refreshClick}>
+          {/* <a id="progress" onClick={refreshClick}>
             <Icon
               type="reload"
-              style={{ verticalAlign: 'middle', marginLeft: 5 }}
+              style={{ verticalAlign: "middle", marginLeft: 5 }}
             />
-          </a>
+          </a> */}
         </p>
         {customer_arr.map(data => (
           <NodeProgress

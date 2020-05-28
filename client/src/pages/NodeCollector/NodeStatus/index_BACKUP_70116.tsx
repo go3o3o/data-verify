@@ -53,9 +53,12 @@ function NodeStatus(props: InjectedProps) {
       if (Object.keys(json).length !== 0) {
         customer_arr.push(json);
       }
+<<<<<<< HEAD
       json = {};
       json['name'] = data.name;
       json[data.status] = data.cnt;
+=======
+>>>>>>> develop
     }
   });
 

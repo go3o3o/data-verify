@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Button } from 'reactstrap';
-import { Card, Icon } from 'antd';
+import React, { useState } from "react";
+import { Button } from "reactstrap";
+import { Card, Icon } from "antd";
 
-import NodeProgress from './NodeProgress';
-import AwsSqs from './AwsSqs';
+import NodeProgress from "./NodeProgress";
+import AwsSqs from "./AwsSqs";
 
 type InjectedProps = {
   statusData: any;
@@ -19,19 +19,19 @@ function NodeStatus(props: InjectedProps) {
   const refreshClick = (e: any) => {
     var refreshButton = e.currentTarget.id;
     // console.log(refreshButton);
-    if (refreshButton === 'sqs') {
+    if (refreshButton === "sqs") {
       setReloadSqs(Math.random() * 10);
-    } else if (e.target.id === 'progress') {
+    } else if (e.target.id === "progress") {
       setReloadProgress(Math.random() * 10);
     }
   };
   const buttonClick = (e: any) => {
     const progressButton = e.target.id;
-    if (progressButton === 'complete') {
+    if (progressButton === "complete") {
       setViewComplete(!viewComplete);
-    } else if (progressButton === 'working') {
+    } else if (progressButton === "working") {
       setViewWorking(!viewWorking);
-    } else if (progressButton === 'error') {
+    } else if (progressButton === "error") {
       setViewError(!viewError);
     }
   };
@@ -40,21 +40,15 @@ function NodeStatus(props: InjectedProps) {
   var customer_arr: object[] = [];
   var json = {};
   props.statusData.map((data: any) => {
-    // customer_set<>: customer 중복 제거해서 set에 담기
     if (customer_set.has(data.name)) {
-      // { name: customer, [complete: 0, working: 0, error: 0] }
       json[data.status] = data.cnt;
     } else {
-      // { name: customer }
       customer_set.add(data.name);
-      json = {};
-      json['name'] = data.name;
-      json[data.status] = data.cnt;
       if (Object.keys(json).length !== 0) {
         customer_arr.push(json);
       }
       json = {};
-      json['name'] = data.name;
+      json["name"] = data.name;
       json[data.status] = data.cnt;
     }
   });
@@ -63,26 +57,26 @@ function NodeStatus(props: InjectedProps) {
     <>
       <Card
         style={{
-          width: '49%',
-          display: 'inline-block',
-          verticalAlign: 'top',
-          marginRight: 20,
+          width: "49%",
+          display: "inline-block",
+          verticalAlign: "top",
+          marginRight: 20
         }}
       >
         <p
           style={{
-            textAlign: 'left',
+            textAlign: "left",
             fontSize: 18,
-            fontWeight: 'bold',
+            fontWeight: "bold"
           }}
         >
           고객별 수집 현황
-          <a id="progress" onClick={refreshClick}>
+          {/* <a id="progress" onClick={refreshClick}>
             <Icon
               type="reload"
-              style={{ verticalAlign: 'middle', marginLeft: 5 }}
+              style={{ verticalAlign: "middle", marginLeft: 5 }}
             />
-          </a>
+          </a> */}
         </p>
         {customer_arr.map(data => (
           <NodeProgress
@@ -99,10 +93,10 @@ function NodeStatus(props: InjectedProps) {
             id="complete"
             color="primary"
             style={{
-              height: '20px',
-              width: '30px',
+              height: "20px",
+              width: "30px",
               padding: 0,
-              margin: 5,
+              margin: 5
             }}
             onClick={buttonClick}
           >
@@ -115,10 +109,10 @@ function NodeStatus(props: InjectedProps) {
             id="working"
             color="warning"
             style={{
-              height: '20px',
-              width: '30px',
+              height: "20px",
+              width: "30px",
               padding: 0,
-              margin: 5,
+              margin: 5
             }}
             onClick={buttonClick}
           >
@@ -131,10 +125,10 @@ function NodeStatus(props: InjectedProps) {
             id="error"
             color="danger"
             style={{
-              height: '20px',
-              width: '30px',
+              height: "20px",
+              width: "30px",
               padding: 0,
-              margin: 5,
+              margin: 5
             }}
             onClick={buttonClick}
           >
@@ -145,18 +139,18 @@ function NodeStatus(props: InjectedProps) {
         </div>
       </Card>
       <Card
-        style={{ width: '49%', display: 'inline-block', verticalAlign: 'top' }}
+        style={{ width: "49%", display: "inline-block", verticalAlign: "top" }}
       >
-        <p style={{ textAlign: 'left', fontSize: 18, fontWeight: 'bold' }}>
+        <p style={{ textAlign: "left", fontSize: 18, fontWeight: "bold" }}>
           SQS 상태
           <a id="sqs" onClick={refreshClick}>
             <Icon
               type="reload"
-              style={{ verticalAlign: 'middle', marginLeft: 5 }}
+              style={{ verticalAlign: "middle", marginLeft: 5 }}
             />
           </a>
         </p>
-        <AwsSqs reload={reloadSqs} />
+        {/* <AwsSqs reload={reloadSqs} /> */}
       </Card>
     </>
   );
