@@ -2,7 +2,6 @@ import * as path from 'path';
 import * as express from 'express';
 import * as http from 'http';
 import * as cors from 'cors';
-import axios from 'axios';
 
 import { createConnection, createConnections } from 'typeorm';
 
