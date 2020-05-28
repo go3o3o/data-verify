@@ -1,11 +1,12 @@
 import * as path from 'path';
 import * as express from 'express';
 import * as http from 'http';
-// import * as cors from 'cors';
+import * as cors from 'cors';
+import axios from 'axios';
 
 import { createConnection, createConnections } from 'typeorm';
 
-import collectData from './routes/collectData';
+import collectData from './routes/CollectData';
 import collectCount from './routes/collectCount';
 import dmapRequestRouter from './routes/dmapRequest';
 import nodeRequestRouter from './routes/nodeRequest';
@@ -23,7 +24,7 @@ async function runServer() {
   const app = express();
 
   app.use(express.json());
-  // app.use(cors());
+  app.use(cors());
   app.use(express.static(path.join(__dirname, 'public')));
   app.use('/dmap', dmapRequestRouter);
   app.use('/node', nodeRequestRouter);

@@ -6,7 +6,7 @@
   "jsx": "react",
   "scripts": {
     "build": "yarn workspace server build && yarn workspace client build",
-    "start": "yarn workspace server start",
+    "start": "yarn workspace server start --hot --host 0.0.0.0",
     "dev": "yarn workspace client watch & yarn workspace server start:dev",
     "test": "yarn server:test",
     "client:lint": "yarn workspace client lint",
@@ -17,7 +17,7 @@
     "server:test": "yarn workspace server test",
     "server:test:mocha": "yarn workspace server test:mocha"
   },
-  "license": "MIT",
+  "license": "ISC",
   "workspaces": [
     "server",
     "client"

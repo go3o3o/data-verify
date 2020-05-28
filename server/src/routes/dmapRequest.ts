@@ -140,6 +140,23 @@ router.delete('/:queue_seq', async (req, res) => {
 
 router.put('', async (req, res) => {
   const queue = req.body;
+  try {
+    const manager = getConnectionManager().get('dmap');
+    const repository = manager
+      .getRepository(DmapCrawlQueue)
+      .createQueryBuilder();
+
+    await repository
+      .update()
+      .set({ start_dt: queue.start_dt, end_dt: queue.end_dt })
+      .where('seq = :seq', { seq: queue.seq })
+      .execute();
+    return res.json({ msg: 'OK' });
+  } catch (e) {
+    return res.status(500).json({ msg: e.message });
+  }
 });
+
+
 
 export default router;

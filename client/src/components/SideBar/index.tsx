@@ -86,6 +86,14 @@ class SideBar extends Component<MenuFilterProps> {
                   모니터링
                 </Link>
               </Menu.Item>
+              <Menu.Item key="nodeRule">
+                <Link
+                  key="nodeRule"
+                  to={`${PAGE_PATHS.NODE}/nodeRule/${this.state['collapsed']}`}
+                >
+                  룰
+                </Link>
+              </Menu.Item>
             </SubMenu>
             <SubMenu
               key="dmap"

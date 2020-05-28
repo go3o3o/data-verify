@@ -47,7 +47,6 @@ export type ProgressDto = {
   upd_dt: string;
 };
 
-// const API_HOST = process.env.API_HOST || "http://61.82.137.194:8000";
 const API_HOST = process.env.API_HOST || 'http://localhost:8000';
 
 class NodeService {

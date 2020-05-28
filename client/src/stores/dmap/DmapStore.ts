@@ -42,7 +42,9 @@ class DmapStore {
   }
 
   @action
-  async updateCrawlQueue(queue: CrawlQueueDto[]) {}
+  async updateCrawlQueue(queue: CrawlQueueDto) {
+    await this.dmapService.updateCrawlQueue(queue);
+  }
 
   @action
   setDmap(dmap: ProjectDto[]) {

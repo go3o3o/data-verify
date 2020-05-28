@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-@Entity({ name: 'tb_collect_data' })
+@Entity({ name: 'tb_collect_doc' })
 export class CollectData {
   @PrimaryGeneratedColumn()
   public seq!: number;
