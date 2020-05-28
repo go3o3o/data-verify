@@ -1,0 +1,12 @@
+server/src/config.ts
+client/src/assets/
+
+node_modules/
+client/node_modules/
+server/node_modules/
+
+client/.cache/
+server/src/public/
+server/build/
+
+.DS_Store
