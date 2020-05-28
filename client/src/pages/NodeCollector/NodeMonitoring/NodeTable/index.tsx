@@ -170,7 +170,7 @@ const NodeTable = ({ eventsData }: { eventsData: any }) => {
         title: 'seq',
         dataIndex: 'seq',
         key: 'seq',
-        width: '5%',
+        width: '10%',
       },
       {
         title: '시작일',
@@ -202,7 +202,21 @@ const NodeTable = ({ eventsData }: { eventsData: any }) => {
         title: '에러메시지',
         dataIndex: 'error_msg',
         key: 'error_msg',
-        width: '50%',
+        width: '40%',
+      },
+      {
+        title: 'ON',
+        dataIndex: 'on_going_flag',
+        key: 'on_going_flag',
+        render: text => {
+          if (text === 'Y') {
+            return (
+              <span style={{ color: 'black', fontWeight: 'bold' }}>{text}</span>
+            );
+          } else {
+            return <span style={{ color: '#DBDBDB' }}>{text}</span>;
+          }
+        },
       },
       {
         title: '',
