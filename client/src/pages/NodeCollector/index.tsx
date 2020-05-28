@@ -42,7 +42,6 @@ class NodeCollector extends Component<InjectedProps & RouteComponentProps> {
           nodeData: res.nodeData.data.data,
           customerData: res.customers.data.data,
         };
-        // console.log(data);
         return data;
       });
     return (

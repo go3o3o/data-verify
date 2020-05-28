@@ -32,6 +32,7 @@ export const FilterCustomer = ({
           고객명
         </Avatar>
         <Select
+          showSearch
           id="customer"
           size="large"
           style={{ width: '230px', marginRight: '40px' }}

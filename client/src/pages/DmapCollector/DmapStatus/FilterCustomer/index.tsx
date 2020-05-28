@@ -1,7 +1,11 @@
 import React from 'react';
 import { Select, Avatar, Input } from 'antd';
 
-export const FilterCustomer = ({ filterBy, customers, ...props }: {
+export const FilterCustomer = ({
+  filterBy,
+  customers,
+  ...props
+}: {
   filterBy: any;
   customers: any;
 }) => {
@@ -27,6 +31,7 @@ export const FilterCustomer = ({ filterBy, customers, ...props }: {
           고객명
         </Avatar>
         <Select
+          showSearch
           id="customer"
           size="large"
           style={{ width: '230px', marginRight: '40px' }}
