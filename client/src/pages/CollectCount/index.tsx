@@ -1,6 +1,7 @@
-import React, { Component } from "react";
-import { RouteComponentProps, Link } from "react-router-dom";
-import { inject, observer } from "mobx-react";
+import React, { Component } from 'react';
+import { RouteComponentProps, Link } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
+import Async from 'react-async';
 import {
   Toast,
   ToastHeader,
@@ -9,16 +10,15 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
-  ModalFooter
-} from "reactstrap";
-import { Layout, PageHeader } from "antd";
+  ModalFooter,
+} from 'reactstrap';
+import { Layout, Spin } from 'antd';
 
-import { STORES } from "~constants";
+import { STORES } from '~constants';
 
-import VerifyStore from "~stores/verify/VerifyStore";
-import MenuBar from "~components/MenuBar";
-import SideBar from "~components/SideBar";
-import DetailCount from "./DetailCount";
+import VerifyStore from '~stores/verify/VerifyStore';
+import SideBar from '~components/SideBar';
+import DetailCount from './DetailCount';
 
 type InjectedProps = {
   [STORES.VERIFY_STORE]: VerifyStore;
@@ -27,12 +27,16 @@ type InjectedProps = {
   collapsed: string;
 }>;
 
-const { Header, Sider, Content } = Layout;
+const { Content } = Layout;
 
 class CollectCount extends Component<InjectedProps & RouteComponentProps> {
   constructor(props: any) {
     super(props);
-    this.state = { modal: false, customer_id: "", always_yn: "" };
+    this.state = {
+      modal: false,
+      customer_id: '',
+      always_yn: '',
+    };
 
     this.toggle = this.toggle.bind(this);
   }
@@ -42,13 +46,21 @@ class CollectCount extends Component<InjectedProps & RouteComponentProps> {
   }
 
   toggle = (e: any) => {
-    this.setState({ modal: !this.state["modal"] });
-    if (!this.state["modal"]) {
+    this.setState({ modal: !this.state['modal'] });
+    if (!this.state['modal']) {
       this.setState({
         customer_id: e.target.value,
-        always_yn: e.target.getAttribute("value2")
+        always_yn: e.target.getAttribute('value2'),
       });
     }
+  };
+
+  loadCountDataByCustomerId = () => {
+    return this.props[STORES.VERIFY_STORE]
+      .countDataByCustomerId(this.state['customer_id'], this.state['always_yn'])
+      .then(res => {
+        return res.data;
+      });
   };
 
   closeBtn = (
@@ -59,40 +71,32 @@ class CollectCount extends Component<InjectedProps & RouteComponentProps> {
 
   render() {
     const { count } = this.props[STORES.VERIFY_STORE];
-
-    const collapsed = this.props.match.params.collapsed;
-
     const alwaysCount: any[] = [];
     const retroactiveCount: any[] = [];
     count.map(c => {
-      if (c.always_yn === "Y") {
+      if (c.always_yn === 'Y') {
         alwaysCount.push(c);
       } else {
         retroactiveCount.push(c);
       }
     });
 
+    const collapsed = this.props.match.params.collapsed;
+
     return (
       <>
-        <Layout style={{ height: "100vh" }}>
+        <Layout style={{ height: '100vh' }}>
           <SideBar selectedKeys="count" openKeys="" collapsed={collapsed} />
-          <Layout style={{ background: "#051428" }}>
-            <Content style={{ margin: "24px 16px 0", textAlign: "center" }}>
-              {/* <div
-                style={{
-                  padding: 24,
-                  background: "#fff",
-                  textAlign: "center"
-                }}
-              > */}
+          <Layout style={{ background: '#051428' }}>
+            <Content style={{ margin: '24px 16px 0', textAlign: 'center' }}>
               <Toast
                 fade={false}
                 style={{
-                  background: "#FFF",
-                  textAlign: "left",
-                  minWidth: "100%",
-                  display: "inline-block",
-                  marginBottom: 30
+                  background: '#FFF',
+                  textAlign: 'left',
+                  minWidth: '100%',
+                  display: 'inline-block',
+                  marginBottom: 30,
                 }}
               >
                 <ToastHeader
@@ -100,7 +104,7 @@ class CollectCount extends Component<InjectedProps & RouteComponentProps> {
                     fontSize: 18,
                     padding: 10,
                     marginLeft: 10,
-                    marginRight: 10
+                    marginRight: 10,
                   }}
                 >
                   상시수집 건수
@@ -115,7 +119,7 @@ class CollectCount extends Component<InjectedProps & RouteComponentProps> {
                         onClick={this.toggle}
                         value={v.customer_id}
                         value2="Y"
-                        style={{ margin: "10px" }}
+                        style={{ margin: '10px' }}
                       >
                         {v.customer_id}
                       </Button>
@@ -126,10 +130,10 @@ class CollectCount extends Component<InjectedProps & RouteComponentProps> {
               <Toast
                 fade={false}
                 style={{
-                  background: "#FFF",
-                  textAlign: "left",
-                  minWidth: "100%",
-                  display: "inline-block"
+                  background: '#FFF',
+                  textAlign: 'left',
+                  minWidth: '100%',
+                  display: 'inline-block',
                 }}
               >
                 <ToastHeader
@@ -137,7 +141,7 @@ class CollectCount extends Component<InjectedProps & RouteComponentProps> {
                     fontSize: 18,
                     padding: 10,
                     marginLeft: 10,
-                    marginRight: 10
+                    marginRight: 10,
                   }}
                 >
                   소급수집 건수
@@ -152,7 +156,7 @@ class CollectCount extends Component<InjectedProps & RouteComponentProps> {
                         onClick={this.toggle}
                         value={v.customer_id}
                         value2="N"
-                        style={{ margin: "10px" }}
+                        style={{ margin: '10px' }}
                       >
                         {v.customer_id}
                       </Button>
@@ -165,20 +169,30 @@ class CollectCount extends Component<InjectedProps & RouteComponentProps> {
           </Layout>
         </Layout>
         <Modal
-          isOpen={this.state["modal"]}
+          isOpen={this.state['modal']}
           toggle={this.toggle}
           fade={false}
-          style={{ minWidth: "80%" }}
+          style={{ minWidth: '80%' }}
         >
           <ModalHeader toggle={this.toggle} close={this.closeBtn}>
-            {this.state["customer_id"]} 수집 건수
+            {this.state['customer_id']} 수집 건수
           </ModalHeader>
           <ModalBody>
-            <DetailCount
-              verifyStore={this.props[STORES.VERIFY_STORE]}
-              customer_id={this.state["customer_id"]}
-              always_yn={this.state["always_yn"]}
-            />
+            <Async promiseFn={this.loadCountDataByCustomerId}>
+              <Async.Loading>
+                <Spin size="large" />
+              </Async.Loading>
+              <Async.Resolved>
+                {data => {
+                  return (
+                    <DetailCount
+                      countDataByCustomerId={data['data']}
+                      always_yn={this.state['always_yn']}
+                    />
+                  );
+                }}
+              </Async.Resolved>
+            </Async>
           </ModalBody>
           <ModalFooter>
             <Button color="secondary" onClick={this.toggle}>

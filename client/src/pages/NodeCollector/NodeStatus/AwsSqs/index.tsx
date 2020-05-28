@@ -1,123 +1,128 @@
 import React, { Component } from 'react';
+import { Async } from 'react-async';
 import aws from 'aws-sdk';
 
 import { Table, Spin } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
-import 'antd/dist/antd.css';
 
-// import { config } from "~assets/config";
+import { config } from '~assets/config';
 
 type InjectedProps = {
   reload: number;
 };
 
-// const region = config.region;
-// const accessKeyId = config.access_key_id;
-// const secretAccessKey = config.secret_access_key;
+const region = config.region;
+const accessKeyId = config.access_key_id;
+const secretAccessKey = config.secret_access_key;
 
 class AwsSqs extends Component<InjectedProps> {
   constructor(props: any) {
     super(props);
 
-    // aws.config.update({
-    //   region: region,
-    //   accessKeyId: accessKeyId,
-    //   secretAccessKey: secretAccessKey
-    // });
-
-    this.state = {
-      queueList: undefined,
-      loading: false,
-    };
+    aws.config.update({
+      region: region,
+      accessKeyId: accessKeyId,
+      secretAccessKey: secretAccessKey,
+    });
 
     this.loadSqsList = this.loadSqsList.bind(this);
   }
-  componentWillMount() {
-    this.loadSqsList();
-  }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: any) {
     if (this.props.reload !== nextProps.reload || this.props.reload === 0) {
       this.loadSqsList();
     }
   }
 
-  loadSqsList = () => {
+  delay = () => {
+    return new Promise(resolve => setTimeout(resolve, 2500));
+  };
+
+  getSqsList = async () => {
     const sqs = new aws.SQS();
     const params = {
       QueueNamePrefix: 'dmap',
     };
-    var queueList: any[] = [];
-
-    sqs.listQueues(
-      params,
-      function(err, data) {
-        if (data.QueueUrls !== undefined) {
-          data.QueueUrls.forEach(url => {
-            const urlParams = { QueueUrl: url, AttributeNames: ['All'] };
-            var json = {};
-            sqs.getQueueAttributes(urlParams, function(err, data) {
-              if (data.Attributes !== undefined) {
-                var queryUrl = String(url).substring(
-                  String(url).indexOf('dmap'),
-                );
-                json['queryUrl'] = queryUrl;
-                json['msgSize'] = Number(
-                  data.Attributes.ApproximateNumberOfMessages,
-                );
-                json['msgDlayed'] =
-                  data.Attributes.ApproximateNumberOfMessagesDelayed;
-                json['msgNotVisible'] =
-                  data.Attributes.ApproximateNumberOfMessagesNotVisible;
-              }
-            });
+    var queueList: object[] = [];
+    sqs.listQueues(params, function(data: any) {
+      var json = {};
+      if (data.QueueUrls !== undefined) {
+        data.QueueUrls.forEach((queueUrl: string) => {
+          const urlParams = { QueueUrl: queueUrl, AttributeNames: ['All'] };
+          var json = {};
+          sqs.getQueueAttributes(urlParams, function(data: any) {
+            if (data.Attributes !== undefined) {
+              // queueList.push(data.Attributes);
+              var queryUrl = String(queueUrl).substring(
+                String(queueUrl).indexOf('dmap'),
+              );
+              json['queryUrl'] = queryUrl;
+              json['msgQueue'] = data.Attributes.ApproximateNumberOfMessages;
+              json['msgDelay'] =
+                data.Attributes.ApproximateNumberOfMessagesDelayed;
+              json['msgMove'] =
+                data.Attributes.ApproximateNumberOfMessagesNotVisible;
+            }
             queueList.push(json);
           });
-          this.setState({ loading: true });
-          this.setState({ queueList });
-        }
-      }.bind(this),
-    );
+        });
+      }
+    });
+    await this.delay();
+    return queueList;
+  };
+
+  loadSqsList = async () => {
+    var result = this.getSqsList();
+    // console.log(result);
+    return result;
   };
 
   render() {
-    // console.log(this.state['queueList']);
     const columns: ColumnProps<any>[] = [
       { title: 'URL', dataIndex: 'queryUrl', key: 'queryUrl', width: '50%' },
       {
         title: '큐 사이즈',
-        dataIndex: 'msgSize',
-        key: 'msgSize',
-        sorter: (a, b) => a.msgSize - b.msgSize,
-        sortDirections: ['descend'],
+        dataIndex: 'msgQueue',
+        key: 'msgQueue',
+        sorter: (a, b) => a.msgQueue - b.msgQueue,
+        defaultSortOrder: 'descend',
       },
       {
         title: '대기 사이즈',
-        dataIndex: 'msgDlayed',
-        key: 'msgDlayed',
-        sorter: (a, b) => a.msgDlayed - b.msgDlayed,
-        sortDirections: ['descend'],
+        dataIndex: 'msgDelay',
+        key: 'msgDelay',
+        sorter: (a, b) => a.msgDelay - b.msgDelay,
+        sortDirections: ['descend', 'ascend'],
       },
       {
         title: '이동 사이즈',
-        dataIndex: 'msgNotVisible',
-        key: 'msgNotVisible',
-        sorter: (a, b) => a.msgNotVisible - b.msgNotVisible,
-        sortDirections: ['descend'],
+        dataIndex: 'msgMove',
+        key: 'msgMove',
+        sorter: (a, b) => a.msgMove - b.msgMove,
+        sortDirections: ['descend', 'ascend'],
       },
     ];
 
-    return this.state['loading'] ? (
-      <>
-        {/* {console.log(this.state['queueList'])} */}
-        <Table
-          size="small"
-          columns={columns}
-          dataSource={this.state['queueList']}
-        />
-      </>
-    ) : (
-      <Spin />
+    return (
+      <Async promiseFn={this.loadSqsList}>
+        <Async.Loading>
+          <div style={{ position: 'absolute', top: '50%', left: '50%' }}>
+            <Spin size="large" />
+          </div>
+        </Async.Loading>
+        <Async.Resolved>
+          {data => {
+            return (
+              <Table
+                size="small"
+                columns={columns}
+                dataSource={Object.assign(data)}
+              />
+            );
+          }}
+        </Async.Resolved>
+      </Async>
     );
   }
 }

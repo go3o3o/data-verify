@@ -1,9 +1,17 @@
 import React from 'react';
 import { Select, Avatar, Input } from 'antd';
-import 'antd/dist/antd.css';
 
-export const FilterCustomer = ({ filterBy, data, customers, ...props }) => {
-  const onClick = value => {
+export const FilterCustomer = ({
+  filterBy,
+  data,
+  customers,
+  ...props
+}: {
+  filterBy: any;
+  data: any;
+  customers: any;
+}) => {
+  const onClick = (value: string) => {
     filterBy('filterCustomer', 'customer_id', value, data);
   };
   return (
@@ -33,7 +41,7 @@ export const FilterCustomer = ({ filterBy, data, customers, ...props }) => {
             전체
           </Select.Option>
 
-          {customers.map(customer => (
+          {customers.map((customer: object) => (
             <Select.Option key="customer_id" value={customer['customer_id']}>
               {customer['customer_id']}
             </Select.Option>

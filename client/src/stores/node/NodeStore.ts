@@ -1,20 +1,21 @@
 import { action, observable } from 'mobx';
 import autobind from 'autobind-decorator';
-import NodeService, { NodeDto } from '~services/NodeService';
+import NodeService, {
+  RequestDto,
+  UpdateRequestDto,
+} from '~services/NodeService';
 
 @autobind
 class NodeStore {
-  @observable node: NodeDto[] = [];
+  @observable node: RequestDto[] = [];
 
   private nodeService = new NodeService();
 
   @action
   async nodeData(kind: string) {
     const nodeData = await this.nodeService.nodeData(kind);
-    const customerIds = await this.nodeService.getCustomers();
-    // console.log(response.data.data);
-    // this.setNode(response.data.data);
-    return { nodeData, customerIds };
+    const customers = await this.nodeService.getCustomers();
+    return { nodeData, customers };
   }
 
   @action
@@ -24,7 +25,22 @@ class NodeStore {
   }
 
   @action
-  setNode(node: NodeDto[]) {
+  async deleteRequest(request_seq: number) {
+    await this.nodeService.deleteRequest(request_seq);
+  }
+
+  @action
+  async deleteProgress(progress_seq: number) {
+    await this.nodeService.deleteRequest(progress_seq);
+  }
+
+  @action
+  async updateRequest(body: UpdateRequestDto) {
+    await this.nodeService.updateRequest(body);
+  }
+
+  @action
+  setNode(node: RequestDto[]) {
     this.node = node;
   }
 }

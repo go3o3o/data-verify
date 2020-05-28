@@ -1,29 +1,53 @@
-import React, { useEffect } from 'react';
-
+import React, { useEffect, useState } from 'react';
 import { inject, observer } from 'mobx-react';
 
-import { Table } from 'antd';
-import 'antd/dist/antd.css';
+import { Table, Form } from 'antd';
 
 import { STORES } from '~constants';
-import VerifyStore from '~stores/verify/VerifyStore';
+
+import { FilterSearch } from '../FilterSearch';
+import { FilterCollectType } from '../FilterCollectType';
+import { AnyARecord } from 'dns';
 
 type InjectedProps = {
-  verifyStore: VerifyStore;
-  customer_id: string;
+  countDataByCustomerId: any;
   always_yn: string;
 };
 
 function DetailCount(props: InjectedProps) {
-  useEffect(() => {
-    props.verifyStore.setCustomerId(props.customer_id);
-    props.verifyStore.setAlwaysYn(props.always_yn);
-    props.verifyStore.countDataByCustomerId();
-  }, []);
+  const [countDataByCustomerId, setCountDataByCustomerId] = useState(
+    props.countDataByCustomerId,
+  );
 
-  const { customerCount } = props.verifyStore;
+  var handleSearch = (searchText: string) => {
+    var filteredEvents = props.countDataByCustomerId.filter(
+      ({ channel }: { channel: string }) => {
+        return channel.includes(searchText);
+      },
+    );
+    setCountDataByCustomerId(filteredEvents);
+  };
 
-  const today = new Date('2020-01-14');
+  var handleCollectType = (value: string) => {
+    if (value === '디맵수집기') {
+      var filteredEvents = props.countDataByCustomerId.filter(
+        ({ collect_type }: { collect_type: string }) => {
+          return collect_type === '0';
+        },
+      );
+    } else if (value === '신규수집기') {
+      var filteredEvents = props.countDataByCustomerId.filter(
+        ({ collect_type }: { collect_type: string }) => {
+          return collect_type === '1';
+        },
+      );
+    } else if (value === '전체') {
+      var filteredEvents = props.countDataByCustomerId;
+    }
+    setCountDataByCustomerId(filteredEvents);
+  };
+
+  const today = new Date();
 
   const theYear = today.getFullYear();
   const theMonth = today.getMonth();
@@ -32,6 +56,7 @@ function DetailCount(props: InjectedProps) {
   var weeks: string[] = [];
   var retroWeeks: string[] = [];
 
+  // Table Header 부분의 날짜 파싱: 상시수집 데이터 - 일주일, 소급수집 데이터 - 7분기
   if (props.always_yn === 'Y') {
     for (var i = 0; i < 7; i++) {
       var resultDay = new Date(theYear, theMonth, theDate - i);
@@ -67,15 +92,14 @@ function DetailCount(props: InjectedProps) {
     }
   }
 
-  console.log(retroWeeks);
-
   var parsingCheck = new Set();
   var resultCheck = new Set();
-  customerCount.map(c => {
+  countDataByCustomerId.map((c: any) => {
     parsingCheck.add(`${c.channel}&&${c.keyword}`);
     resultCheck.add(c.channel);
   });
 
+  // mother row 만들기
   var parseData: any[] = [];
   if (props.always_yn === 'Y') {
     parsingCheck.forEach(pc => {
@@ -91,26 +115,29 @@ function DetailCount(props: InjectedProps) {
       var count5 = 0;
       var count6 = 0;
 
-      customerCount.map(c => {
-        if (checkChannel === c.channel && checkKeyword === c.keyword) {
-          // console.log(checkChannel, checkKeyword, c.doc_datetime);
+      countDataByCustomerId.map((c: any) => {
+        // console.log(c); //{count: "3", seq: 1245763, channel: "디시인사이드", doc_datetime: "2020-02-24", collect_type: "1", …}
+        if (
+          checkChannel === c.channel &&
+          (checkKeyword === 'null' ? true : checkKeyword === c.keyword)
+        ) {
           parseJson['seq'] = c.seq;
           parseJson['channel'] = c.channel;
           parseJson['keyword'] = c.keyword;
           if (weeks[0] === c.doc_datetime) {
-            count0 = Number(c.count);
+            count0 += Number(c.count);
           } else if (weeks[1] === c.doc_datetime) {
-            count1 = Number(c.count);
+            count1 += Number(c.count);
           } else if (weeks[2] === c.doc_datetime) {
-            count2 = Number(c.count);
+            count2 += Number(c.count);
           } else if (weeks[3] === c.doc_datetime) {
-            count3 = Number(c.count);
+            count3 += Number(c.count);
           } else if (weeks[4] === c.doc_datetime) {
-            count4 = Number(c.count);
+            count4 += Number(c.count);
           } else if (weeks[5] === c.doc_datetime) {
-            count5 = Number(c.count);
+            count5 += Number(c.count);
           } else if (weeks[6] === c.doc_datetime) {
-            count6 = Number(c.count);
+            count6 += Number(c.count);
           }
           parseJson[weeks[0]] = count0;
           parseJson[weeks[1]] = count1;
@@ -137,8 +164,12 @@ function DetailCount(props: InjectedProps) {
       var count5 = 0;
       var count6 = 0;
 
-      customerCount.map(c => {
-        if (checkChannel === c.channel && checkKeyword === c.keyword) {
+      countDataByCustomerId.map((c: any) => {
+        console.log(c); // {count: "838", seq: 1253222, channel: "네이버 블로그", doc_datetime: "2020-01-29", collect_type: "1", …}
+        if (
+          checkChannel === c.channel &&
+          (checkKeyword === 'null' ? true : checkKeyword === c.keyword)
+        ) {
           parseJson['seq'] = c.seq;
           parseJson['channel'] = c.channel;
           parseJson['keyword'] = c.keyword;
@@ -146,37 +177,37 @@ function DetailCount(props: InjectedProps) {
             retroWeeks[1] < c.doc_datetime &&
             retroWeeks[0] >= c.doc_datetime
           ) {
-            count0 = Number(c.count);
+            count0 += Number(c.count);
           } else if (
             retroWeeks[2] < c.doc_datetime &&
             retroWeeks[1] >= c.doc_datetime
           ) {
-            count1 = Number(c.count);
+            count1 += Number(c.count);
           } else if (
             retroWeeks[3] < c.doc_datetime &&
             retroWeeks[2] >= c.doc_datetime
           ) {
-            count2 = Number(c.count);
+            count2 += Number(c.count);
           } else if (
             retroWeeks[4] < c.doc_datetime &&
             retroWeeks[3] >= c.doc_datetime
           ) {
-            count3 = Number(c.count);
+            count3 += Number(c.count);
           } else if (
             retroWeeks[5] <= c.doc_datetime &&
             retroWeeks[4] > c.doc_datetime
           ) {
-            count4 = Number(c.count);
+            count4 += Number(c.count);
           } else if (
             retroWeeks[6] <= c.doc_datetime &&
             retroWeeks[5] > c.doc_datetime
           ) {
-            count5 = Number(c.count);
+            count5 += Number(c.count);
           } else if (
             retroWeeks[7] <= c.doc_datetime &&
             retroWeeks[6] > c.doc_datetime
           ) {
-            count6 = Number(c.count);
+            count6 += Number(c.count);
           }
           parseJson[weeks[0]] = count0;
           parseJson[weeks[1]] = count1;
@@ -195,6 +226,7 @@ function DetailCount(props: InjectedProps) {
   var resultJson = {};
   var childData: any[] = [];
   var childJson = {};
+  // mother row 에 맞는 child row 붙이기
   resultCheck.forEach(rc => {
     var motherChannel = rc;
     childData = [];
@@ -291,7 +323,19 @@ function DetailCount(props: InjectedProps) {
     },
   ];
 
-  return <Table size="small" columns={columns} dataSource={resultData} bordered />;
+  return (
+    <>
+      <Form layout="inline" style={{ textAlign: 'left', marginBottom: 10 }}>
+        <Form.Item>
+          <FilterCollectType filterBy={handleCollectType} />
+        </Form.Item>
+        <Form.Item>
+          <FilterSearch onSearch={handleSearch} />
+        </Form.Item>
+      </Form>
+      <Table size="small" columns={columns} dataSource={resultData} bordered />
+    </>
+  );
 }
 
 export default inject(STORES.VERIFY_STORE)(observer(DetailCount));

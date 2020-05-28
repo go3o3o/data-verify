@@ -41,7 +41,6 @@ async function runServer() {
   createConnections(appConfig.dbOptions)
     .then(async connection => {
       logger.debug('Connected to DB');
-      // console.log(connection);
     })
     .catch(error => {
       logger.error('TypeORM connection error: ', error);

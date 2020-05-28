@@ -11,6 +11,7 @@ const router = express.Router();
 
 router.post('/:kind', async (req, res) => {
   const kind = req.params.kind;
+  // console.log(kind);
   try {
     const manager = getConnectionManager().get('node');
     const repository = manager
@@ -82,7 +83,6 @@ router.post('/:kind', async (req, res) => {
 
     return res.json({ data: node });
   } catch (e) {
-    console.log(e);
     return res.status(500).json({ msg: e.message });
   }
 });
@@ -102,6 +102,66 @@ router.post('/:kind/:request_seq', async (req, res) => {
       .getMany();
 
     return res.json({ data: detailNode });
+  } catch (e) {
+    return res.status(500).json({ msg: e.message });
+  }
+});
+
+router.delete('/:request_seq', async (req, res) => {
+  const seq = req.params.request_seq;
+  console.log(seq);
+  try {
+    const manager = getConnectionManager().get('node');
+    const repository = manager.getRepository(NodeRequest).createQueryBuilder();
+
+    // await repository
+    //   .delete()
+    //   .where('seq = :seq', { seq: seq })
+    //   .execute();
+
+    return res.json({ msg: 'OK' });
+  } catch (e) {
+    return res.status(500).json({ msg: e.message });
+  }
+});
+
+router.delete('/:progress_seq', async (req, res) => {
+  const seq = req.params.progress_seq;
+  console.log(seq);
+  try {
+    const manager = getConnectionManager().get('node');
+    const repository = manager.getRepository(NodeProgress).createQueryBuilder();
+
+    // await repository
+    //   .delete()
+    //   .where('seq = :seq', { seq: seq })
+    //   .execute();
+
+    return res.json({ msg: 'OK' });
+  } catch (e) {
+    return res.status(500).json({ msg: e.message });
+  }
+});
+
+router.patch('', async (req, res) => {
+  const request = req.body;
+  // console.log(request);
+  try {
+    const manager = getConnectionManager().get('node');
+    const repository = manager.getRepository(NodeRequest).createQueryBuilder();
+
+    await repository
+      .update(NodeRequest)
+      .set({
+        keyword: request.keyword,
+        start_dt: request.start_dt,
+        end_dt: request.end_dt,
+        status: request.status,
+      })
+      .where('seq = :seq', { seq: request.seq })
+      .execute();
+
+    return res.json({ msg: 'OK' });
   } catch (e) {
     return res.status(500).json({ msg: e.message });
   }

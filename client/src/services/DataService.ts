@@ -48,7 +48,9 @@ class DataService {
     customer_id: string,
     channel: string,
   ): Promise<ApiResponse<DataDto[]>> {
-    return axios.post(`${API_HOST}/data/always/${customer_id}/${channel}`);
+    return axios.post(
+      `${API_HOST}/data/always/${customer_id}/${encodeURIComponent(channel)}`,
+    );
   }
 
   async retroactiveData(): Promise<ApiResponse<DataDto[]>> {
@@ -63,7 +65,11 @@ class DataService {
     customer_id: string,
     channel: string,
   ): Promise<ApiResponse<DataDto[]>> {
-    return axios.post(`${API_HOST}/data/retroactive/${customer_id}/${channel}`);
+    return axios.post(
+      `${API_HOST}/data/retroactive/${customer_id}/${encodeURIComponent(
+        channel,
+      )}`,
+    );
   }
 }
 

@@ -1,9 +1,8 @@
 import React from 'react';
 import { Select, Avatar, Input } from 'antd';
-import 'antd/dist/antd.css';
 
-export const FilterStatus = ({ filterBy, ...props }) => {
-  const onClick = value => {
+export const FilterStatus = ({ filterBy, ...props }: { filterBy: any }) => {
+  const onClick = (value: string) => {
     filterBy(value);
   };
 

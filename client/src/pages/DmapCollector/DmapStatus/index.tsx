@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Async } from 'react-async';
 
 import { Button } from 'reactstrap';
-import { Card, Icon, Form } from 'antd';
+import { Card, DatePicker, Form } from 'antd';
 
 import { FilterCustomer } from './FilterCustomer';
 import { FilterSearch } from './FilterSearch';
@@ -21,20 +21,20 @@ class DmapStatus extends Component<InjectedProps> {
     var project_set = new Set();
     var project_arr: object[] = [];
     var json = {};
-    this.props.statusData.map(data => {
-      if (project_set.has(data.name)) {
-        json[data.status] = data.cnt;
+    this.props.statusData.map((data: object) => {
+      if (project_set.has(data['name'])) {
+        json[data['status']] = data['cnt'];
       } else {
-        project_set.add(data.name);
+        project_set.add(data['name']);
         if (Object.keys(json).length !== 0) {
           project_arr.push(json);
         }
         json = {};
-        json['seq'] = data.seq;
-        json['name'] = data.name;
-        json['customer_id'] = data.customer_id;
+        json['seq'] = data['seq'];
+        json['name'] = data['name'];
+        json['customer_id'] = data['customer_id'];
         json['filterCustomer'] = true;
-        json[data.status] = data.cnt;
+        json[data['status']] = data['cnt'];
       }
     });
     // console.log(project_arr);
@@ -66,19 +66,19 @@ class DmapStatus extends Component<InjectedProps> {
     this.setState({ selectProject: project });
   };
 
-  handleFilterCustomer = value => {
+  handleFilterCustomer = (value: string) => {
     var filteredEvents = [];
     if (value === 'all') {
-      filteredEvents = this.state['data'].filter(data => {
+      filteredEvents = this.state['data'].filter((data: object) => {
         data['filterCustomer'] = true;
         return data['filterCustomer'] === true;
       });
     } else {
-      filteredEvents = this.state['data'].filter(data => {
+      filteredEvents = this.state['data'].filter((data: object) => {
         if (data['customer_id'] === value) {
           data['filterCustomer'] = true;
         } else {
-          data.filterCustomer = false;
+          data['filterCustomer'] = false;
         }
         return data['filterCustomer'] === true;
       });
@@ -89,10 +89,12 @@ class DmapStatus extends Component<InjectedProps> {
     });
   };
 
-  handleSearch = searchText => {
-    var filteredEvents = this.state['data'].filter(({ name, customer_id }) => {
-      return name.includes(searchText) || customer_id.includes(searchText);
-    });
+  handleSearch = (searchText: string) => {
+    var filteredEvents = this.state['data'].filter(
+      ({ name, customer_id }: { name: string; customer_id: string }) => {
+        return name.includes(searchText) || customer_id.includes(searchText);
+      },
+    );
 
     this.setState({
       project: filteredEvents,
@@ -138,7 +140,7 @@ class DmapStatus extends Component<InjectedProps> {
               /> */}
             </a>
           </p>
-          {this.state['project'].map(data => (
+          {this.state['project'].map((data: any) => (
             <DmapProgress
               project={data}
               projectClick={this.projectClick}

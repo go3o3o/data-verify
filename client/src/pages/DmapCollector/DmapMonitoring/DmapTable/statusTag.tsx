@@ -1,6 +1,5 @@
 import React from 'react';
 import { Tag } from 'antd';
-import 'antd/dist/antd.css';
 
 const requestStateMap = {
   0: <Tag color="gold">대기</Tag>,
@@ -12,7 +11,7 @@ const requestStateMap = {
 
 // const requestUseYnMap = {};
 
-export const StatusTag = ({ table, status }) => {
+export const StatusTag = ({ table, status }: { table: any; status:any; }) => {
   if (table === 'progress') {
     return requestStateMap[status];
   }

@@ -1,9 +1,15 @@
 import React from 'react';
 import { Select, Avatar, Input } from 'antd';
-import 'antd/dist/antd.css';
 
-export const FilterDocDatetime = ({ filterBy, data, ...props }) => {
-  const onClick = value => {
+export const FilterDocDatetime = ({
+  filterBy,
+  data,
+  ...props
+}: {
+  filterBy: any;
+  data: any;
+}) => {
+  const onClick = (value: string) => {
     filterBy('filterDocDatetime', 'doc_datetime', value, data);
   };
 

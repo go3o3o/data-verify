@@ -3,13 +3,12 @@ import Async from 'react-async';
 
 import { Table, Spin, Button, Popover, Icon } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
-import 'antd/dist/antd.css';
 
 import DmapStore from '~stores/dmap/DmapStore';
 import { StatusTag } from './statusTag';
 
-const DmapTable = ({ eventsData }) => {
-  const tableColumns: ColumnProps<{}>[] = [
+const DmapTable = ({ eventsData }: { eventsData: any }) => {
+  const columns: ColumnProps<{}>[] = [
     {
       title: '번호',
       dataIndex: 'seq',
@@ -126,11 +125,7 @@ const DmapTable = ({ eventsData }) => {
           return (
             <Popover content={content} title="BICA 정보" trigger="click">
               {/* <Button size="small" shape="circle" icon="check" /> */}
-              <Icon
-                type="heart"
-                theme="twoTone"
-                twoToneColor="#eb2f96"
-              />
+              <Icon type="heart" theme="twoTone" twoToneColor="#eb2f96" />
             </Popover>
           );
         }
@@ -141,7 +136,7 @@ const DmapTable = ({ eventsData }) => {
   const loadDmapDetailData = (project_seq: number) => {
     const dmapStore = new DmapStore();
     return dmapStore.dmapDetailData(project_seq).then(res => {
-      return res.data;
+      return res.data.data;
     });
   };
 
@@ -177,9 +172,7 @@ const DmapTable = ({ eventsData }) => {
         title: '상태',
         dataIndex: 'state',
         key: 'state',
-        render: (text, record) => (
-          <StatusTag table="progress" status={record.state} />
-        ),
+        render: (record: any) => <StatusTag table="progress" status={record} />,
       },
     ];
 
@@ -191,10 +184,8 @@ const DmapTable = ({ eventsData }) => {
           </div>
         </Async.Loading>
         <Async.Resolved>
-          {data => {
-            return (
-              <Table size="small" columns={columns} dataSource={data['data']} />
-            );
+          {(data: object[]) => {
+            return <Table size="small" columns={columns} dataSource={data} />;
           }}
         </Async.Resolved>
       </Async>
@@ -204,7 +195,7 @@ const DmapTable = ({ eventsData }) => {
   return (
     <Table
       className="components-table-demo-nested"
-      columns={tableColumns}
+      columns={columns}
       dataSource={eventsData}
       expandedRowRender={expandedRowRender}
       // scroll={{ x: 1500, y: 300 }}

@@ -1,5 +1,5 @@
 {
-  "name": "prgms-daangn",
+  "name": "data-verify",
   "version": "1.0.0",
   "main": "index.js",
   "private": true,
@@ -24,14 +24,23 @@
   ],
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.7.0",
+    "@date-io/date-fns": "^1.3.13",
+    "@material-ui/core": "^4.9.4",
+    "@material-ui/pickers": "^3.2.10",
     "@types/react-modal": "^3.10.0",
     "@types/react-router-dom": "^5.1.2",
+    "@types/recharts": "^1.8.5",
+    "date-fns": "^2.10.0",
+    "react-async": "^10.0.0",
     "react-modal": "^3.11.1",
     "react-router-dom": "^5.1.2",
+    "recharts": "^2.0.0-beta.1",
     "yarn": "^1.19.1"
   },
   "devDependencies": {
     "@types/react": "^16.9.11",
     "@types/react-dom": "^16.9.4"
-  }
+  },
+  "description": "수집데이터 검증 사이트 디자인 테스트",
+  "author": "yonikim"
 }

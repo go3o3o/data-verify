@@ -1,16 +1,7 @@
 import { action, observable, reaction, computed } from 'mobx';
 import autobind from 'autobind-decorator';
-import DataService, {
-  DataDto,
-  DetailDto,
-  CustomerDto,
-} from '~services/DataService';
-import CountService, { CountDto, DetailCountDto } from '~services/CountService';
-
-export type Detail = {
-  customer_id: string;
-  channel: string;
-};
+import DataService, { DataDto, CustomerDto } from '~services/DataService';
+import CountService, { CountDto } from '~services/CountService';
 
 @autobind
 class VerifyStore {
@@ -37,6 +28,7 @@ class VerifyStore {
 
   @action
   async alwaysDetailData(customer_id: string, channel: string) {
+    
     const alwaysDetailData = await this.dataService.alwaysDataDetail(
       customer_id,
       channel,
@@ -68,15 +60,12 @@ class VerifyStore {
   }
 
   @action
-  async countDataByCustomerId() {
-    const body: DetailCountDto = {
-      customer_id: this.customer_id,
-      always_yn: this.always_yn,
-    };
-
-    const response = await this.countService.countDataByCustomerId(body);
-    // console.log(response.data.data);
-    this.setCustomerCountData(response.data.data);
+  async countDataByCustomerId(customer_id: string, always_yn: string) {
+    const countDataByCustomerId = await this.countService.countDataByCustomerId(
+      customer_id,
+      always_yn,
+    );
+    return countDataByCustomerId;
   }
 
   @action
