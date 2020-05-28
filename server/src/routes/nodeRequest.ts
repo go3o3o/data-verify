@@ -6,6 +6,7 @@ import { NodeRequest } from '../entities/NodeRequest';
 import { NodeChannel } from '../entities/NodeChannel';
 import { NodeCustomer } from '../entities/NodeCustomer';
 import { NodeProgress } from '../entities/NodeProgress';
+import { NodeRule } from '../entities/NodeRule';
 
 const router = express.Router();
 

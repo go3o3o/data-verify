@@ -24,7 +24,7 @@ router.post('/:kind', async (req, res) => {
 
     datas = await repository
       .where('always_yn = :always_yn', { always_yn })
-      .groupBy('channel')
+      .groupBy('customer_id, channel')
       .orderBy({ customer_id: 'ASC' })
       .getMany();
 

@@ -2,10 +2,14 @@ import * as path from 'path';
 import * as express from 'express';
 import * as http from 'http';
 import * as cors from 'cors';
+<<<<<<< HEAD
+=======
+import axios from 'axios';
+>>>>>>> develop
 
 import { createConnection, createConnections } from 'typeorm';
 
-import collectData from './routes/collectData';
+import collectData from './routes/CollectData';
 import collectCount from './routes/collectCount';
 import dmapRequestRouter from './routes/dmapRequest';
 import nodeRequestRouter from './routes/nodeRequest';
