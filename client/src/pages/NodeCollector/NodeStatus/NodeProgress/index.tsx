@@ -28,10 +28,10 @@ function NodeProgress(props: InjectedProps) {
 
   if (props.viewComplete) {
     sumCnt += complete;
-  } 
+  }
   if (props.viewWorking) {
     sumCnt += working;
-  } 
+  }
   if (props.viewError) {
     sumCnt += error;
   }

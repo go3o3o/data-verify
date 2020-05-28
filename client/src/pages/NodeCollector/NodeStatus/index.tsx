@@ -53,9 +53,6 @@ function NodeStatus(props: InjectedProps) {
       if (Object.keys(json).length !== 0) {
         customer_arr.push(json);
       }
-      json = {};
-      json['name'] = data.name;
-      json[data.status] = data.cnt;
     }
   });
 
@@ -156,7 +153,7 @@ function NodeStatus(props: InjectedProps) {
             />
           </a>
         </p>
-        <AwsSqs reload={reloadSqs} />
+        {/* <AwsSqs reload={reloadSqs} /> */}
       </Card>
     </>
   );
