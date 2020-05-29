@@ -2,11 +2,15 @@ import * as express from 'express';
 
 import { getConnectionManager } from 'typeorm';
 import { CollectData } from '../entities/CollectData';
+import logger from '../lib/logger';
 
 const router = express.Router();
 
 router.post('/:kind', async (req, res) => {
   const kind = req.params.kind;
+  const addr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  logger.info(`${addr}: POST /data/${kind}`);
+
   var always_yn = '';
   if (kind === 'always') {
     always_yn = 'Y';
@@ -36,6 +40,9 @@ router.post('/:kind', async (req, res) => {
 
 router.post('/:kind/getCustomers', async (req, res) => {
   const kind = req.params.kind;
+  const addr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  logger.info(`${addr}: POST /data/${kind}/getCustomers`);
+
   var always_yn = '';
   if (kind === 'always') {
     always_yn = 'Y';
@@ -64,6 +71,11 @@ router.post('/:kind/getCustomers', async (req, res) => {
 
 router.post('/:kind/:customer_id/:channel', async (req, res) => {
   const kind = req.params.kind;
+  const customer_id = req.params.customer_id;
+  const channel = req.params.channel;
+  const addr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  logger.info(`${addr}: POST /data/${kind}/${customer_id}/${channel}`);
+
   var always_yn = '';
   if (kind === 'always') {
     always_yn = 'Y';
@@ -75,8 +87,6 @@ router.post('/:kind/:customer_id/:channel', async (req, res) => {
     const manager = getConnectionManager().get('verify');
     const repository = manager.getRepository(CollectData);
 
-    const customer_id = req.params.customer_id;
-    const channel = req.params.channel;
     var datas = [];
 
     datas = await repository.find({
