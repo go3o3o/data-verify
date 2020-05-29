@@ -1,18 +1,21 @@
 import * as express from 'express';
 
 import { getConnectionManager } from 'typeorm';
+import * as moment from 'moment';
 
 import { NodeRequest } from '../entities/NodeRequest';
 import { NodeChannel } from '../entities/NodeChannel';
 import { NodeCustomer } from '../entities/NodeCustomer';
 import { NodeProgress } from '../entities/NodeProgress';
 import { NodeRule } from '../entities/NodeRule';
+import logger from '../lib/logger';
 
 const router = express.Router();
 
 router.post('/:kind', async (req, res) => {
   const kind = req.params.kind;
-  // console.log(kind);
+  const addr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  logger.info(`${addr}: POST /node/${kind}`);
   try {
     const manager = getConnectionManager().get('node');
     const repository = manager
@@ -91,6 +94,8 @@ router.post('/:kind', async (req, res) => {
 router.post('/:kind/:request_seq', async (req, res) => {
   const kind = req.params.kind;
   const request_seq = req.params.request_seq;
+  const addr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  logger.info(`${addr}: POST /node/${kind}/${request_seq}`);
   try {
     const manager = getConnectionManager().get('node');
     const repository = manager.getRepository(NodeProgress).createQueryBuilder();
@@ -109,16 +114,20 @@ router.post('/:kind/:request_seq', async (req, res) => {
 });
 
 router.delete('/:request_seq', async (req, res) => {
-  const seq = req.params.request_seq;
-  console.log(seq);
+  const request_seq = req.params.request_seq;
+  const addr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  logger.info(`${addr}: DELETE REQUEST /node/${request_seq}`);
+  logger.info(
+    ` ### ${addr}: DELETE FROM dmap_collector.tb_crawl_request WHERE seq = ${request_seq}`,
+  );
   try {
     const manager = getConnectionManager().get('node');
     const repository = manager.getRepository(NodeRequest).createQueryBuilder();
 
-    // await repository
-    //   .delete()
-    //   .where('seq = :seq', { seq: seq })
-    //   .execute();
+    await repository
+      .delete()
+      .where('seq = :seq', { seq: request_seq })
+      .execute();
 
     return res.json({ msg: 'OK' });
   } catch (e) {
@@ -127,16 +136,20 @@ router.delete('/:request_seq', async (req, res) => {
 });
 
 router.delete('/:progress_seq', async (req, res) => {
-  const seq = req.params.progress_seq;
-  console.log(seq);
+  const progress_seq = req.params.progress_seq;
+  const addr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  logger.info(`${addr}: DELETE PROGRESS /node/${progress_seq}`);
+  logger.info(
+    ` ### ${addr}: DELETE FROM dmap_collector.tb_crawl_progress WHERE seq = ${progress_seq}`,
+  );
   try {
     const manager = getConnectionManager().get('node');
     const repository = manager.getRepository(NodeProgress).createQueryBuilder();
 
-    // await repository
-    //   .delete()
-    //   .where('seq = :seq', { seq: seq })
-    //   .execute();
+    await repository
+      .delete()
+      .where('seq = :seq', { seq: progress_seq })
+      .execute();
 
     return res.json({ msg: 'OK' });
   } catch (e) {
@@ -147,6 +160,12 @@ router.delete('/:progress_seq', async (req, res) => {
 router.patch('', async (req, res) => {
   const request = req.body;
   // console.log(request);
+  const addr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  logger.info(
+    ` ### ${addr}: dmap_collector.tb_crawl_request 수정 ${JSON.stringify(
+      request,
+    )}`,
+  );
   try {
     const manager = getConnectionManager().get('node');
     const repository = manager.getRepository(NodeRequest).createQueryBuilder();
