@@ -114,7 +114,6 @@ function DetailCount(props: InjectedProps) {
       var count4 = 0;
       var count5 = 0;
       var count6 = 0;
-
       countDataByCustomerId.map((c: any) => {
         // console.log(c); //{count: "3", seq: 1245763, channel: "디시인사이드", doc_datetime: "2020-02-24", collect_type: "1", …}
         if (
@@ -226,6 +225,16 @@ function DetailCount(props: InjectedProps) {
   var resultJson = {};
   var childData: any[] = [];
   var childJson = {};
+
+  var total0 = 0;
+  var total1 = 0;
+  var total2 = 0;
+  var total3 = 0;
+  var total4 = 0;
+  var total5 = 0;
+  var total6 = 0;
+
+  var resultCheckCnt = 0;
   // mother row 에 맞는 child row 붙이기
   resultCheck.forEach(rc => {
     var motherChannel = rc;
@@ -267,6 +276,7 @@ function DetailCount(props: InjectedProps) {
         childData.push(childJson);
       }
     }
+
     resultJson[weeks[0]] = count0;
     resultJson[weeks[1]] = count1;
     resultJson[weeks[2]] = count2;
@@ -275,9 +285,32 @@ function DetailCount(props: InjectedProps) {
     resultJson[weeks[5]] = count5;
     resultJson[weeks[6]] = count6;
 
+    total0 += count0;
+    total1 += count1;
+    total2 += count2;
+    total3 += count3;
+    total4 += count4;
+    total5 += count5;
+    total6 += count6;
+
     resultJson['children'] = childData;
     resultData.push(resultJson);
   });
+
+  childData = [];
+  resultJson = {};
+  resultJson['list'] = '';
+  resultJson['channel'] = '총계';
+  resultJson[weeks[0]] = total0;
+  resultJson[weeks[1]] = total1;
+  resultJson[weeks[2]] = total2;
+  resultJson[weeks[3]] = total3;
+  resultJson[weeks[4]] = total4;
+  resultJson[weeks[5]] = total5;
+  resultJson[weeks[6]] = total6;
+  resultJson['children'] = childData;
+
+  resultData.unshift(resultJson);
 
   const columns = [
     { title: '', datIndex: 'list', key: 'list', width: '3%' },
