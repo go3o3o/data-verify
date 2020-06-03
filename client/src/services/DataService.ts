@@ -9,11 +9,12 @@ export type DetailDto = {
 export type FilterDataDto = {
   customer_id: string;
   collect_type: string;
-  doc_datetime: string;
+  collect_datetime: string;
 };
 
 export type DataDto = {
   seq: number;
+  collect_datetime: string;
   doc_title: string;
   doc_content: string;
   doc_writer: string;

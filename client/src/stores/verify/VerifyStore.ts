@@ -28,7 +28,6 @@ class VerifyStore {
 
   @action
   async alwaysDetailData(customer_id: string, channel: string) {
-    
     const alwaysDetailData = await this.dataService.alwaysDataDetail(
       customer_id,
       channel,
