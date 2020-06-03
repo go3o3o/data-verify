@@ -6,6 +6,9 @@ export class CollectData {
   public seq!: number;
 
   @Column()
+  public collect_datetime!: string;
+
+  @Column()
   public doc_title!: string;
 
   @Column()
