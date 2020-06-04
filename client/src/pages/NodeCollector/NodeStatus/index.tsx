@@ -153,7 +153,7 @@ function NodeStatus(props: InjectedProps) {
             />
           </a>
         </p>
-        {/* <AwsSqs reload={reloadSqs} /> */}
+        <AwsSqs reload={reloadSqs} />
       </Card>
     </>
   );
