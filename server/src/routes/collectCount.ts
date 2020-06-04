@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.post('', async (req, res) => {
   const addr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  logger.info(`${addr}: POST /count/`);
+  logger.debug(`${addr}: POST /count/`);
   try {
     const manager = getConnectionManager().get('verify');
     const repository = manager
@@ -31,7 +31,7 @@ router.post('/:customer_id/:always_yn', async (req, res) => {
   const customer_id = req.params.customer_id;
   const always_yn = req.params.always_yn;
   const addr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  logger.info(`${addr}: POST /count/${customer_id}/${always_yn}`);
+  logger.debug(`${addr}: POST /count/${customer_id}/${always_yn}`);
 
   try {
     const manager = getConnectionManager().get('verify');

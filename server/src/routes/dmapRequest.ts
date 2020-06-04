@@ -16,7 +16,7 @@ const router = express.Router();
 router.post('/:kind', async (req, res) => {
   const kind = req.params.kind;
   const addr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  logger.info(`${addr}: POST /dmap/${kind}`);
+  logger.debug(`${addr}: POST /dmap/${kind}`);
   try {
     const manager = getConnectionManager().get('dmap');
     const repository = manager
@@ -83,7 +83,7 @@ router.post('/:kind/:project_seq', async (req, res) => {
   const kind = req.params.kind;
   const project_seq = req.params.project_seq;
   const addr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  logger.info(`${addr}: POST /dmap/${kind}/${project_seq}`);
+  logger.debug(`${addr}: POST /dmap/${kind}/${project_seq}`);
   try {
     const manager = getConnectionManager().get('dmap');
     var dmap = [];
@@ -125,8 +125,8 @@ router.post('/:kind/:project_seq', async (req, res) => {
 router.delete('/:queue_seq', async (req, res) => {
   const queue_seq = req.params.queue_seq;
   const addr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  logger.info(`${addr}: DELETE QUEUE /dmap/${queue_seq}`);
-  logger.info(
+  logger.debug(`${addr}: DELETE QUEUE /dmap/${queue_seq}`);
+  logger.debug(
     ` ### ${addr}: DELETE FROM dmap_base.tb_crawl_queue WHERE seq = ${queue_seq}`,
   );
   try {
@@ -149,8 +149,8 @@ router.delete('/:queue_seq', async (req, res) => {
 router.put('', async (req, res) => {
   const queue = req.body;
   const addr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  logger.info(`${addr}: PUT QUEUE /dmap/`);
-  logger.info(
+  logger.debug(`${addr}: PUT QUEUE /dmap/`);
+  logger.debug(
     ` ### ${addr}: UPDATE FROM dmap_base.tb_crawl_queue SET ${JSON.stringify(
       queue,
     )}`,

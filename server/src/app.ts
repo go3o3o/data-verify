@@ -5,12 +5,12 @@ import * as cors from 'cors';
 
 import { createConnection, createConnections } from 'typeorm';
 
-import collectData from './routes/CollectData';
+import collectData from './routes/collectData';
 import collectCount from './routes/collectCount';
 import dmapRequestRouter from './routes/dmapRequest';
 import nodeRequestRouter from './routes/nodeRequest';
 
-import logger from './logger';
+import logger from './lib/logger';
 import * as appConfig from './config';
 
 const stopServer = async (server: http.Server, signal?: string) => {
@@ -35,12 +35,12 @@ async function runServer() {
   });
 
   const server = app.listen(8000, () => {
-    logger.debug('Example app listening on port 8000!');
+    logger.info('Example app listening on port 8000!');
   });
 
   createConnections(appConfig.dbOptions)
     .then(async connection => {
-      logger.debug('Connected to DB');
+      logger.info('Connected to DB');
     })
     .catch(error => {
       logger.error('TypeORM connection error: ', error);
@@ -51,7 +51,7 @@ async function runServer() {
 
 runServer()
   .then(() => {
-    logger.debug('Server run successfully. ');
+    logger.info('Server run successfully. ');
   })
   .catch((ex: Error) => {
     logger.error('Unable run:', ex);

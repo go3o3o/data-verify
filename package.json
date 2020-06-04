@@ -31,6 +31,7 @@
     "@types/react-router-dom": "^5.1.2",
     "@types/recharts": "^1.8.5",
     "date-fns": "^2.10.0",
+    "moment": "^2.26.0",
     "react-async": "^10.0.0",
     "react-modal": "^3.11.1",
     "react-router-dom": "^5.1.2",

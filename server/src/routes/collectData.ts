@@ -9,7 +9,7 @@ const router = express.Router();
 router.post('/:kind', async (req, res) => {
   const kind = req.params.kind;
   const addr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  logger.info(`${addr}: POST /data/${kind}`);
+  logger.debug(`${addr}: POST /data/${kind}`);
 
   var always_yn = '';
   if (kind === 'always') {
@@ -41,7 +41,7 @@ router.post('/:kind', async (req, res) => {
 router.post('/:kind/getCustomers', async (req, res) => {
   const kind = req.params.kind;
   const addr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  logger.info(`${addr}: POST /data/${kind}/getCustomers`);
+  logger.debug(`${addr}: POST /data/${kind}/getCustomers`);
 
   var always_yn = '';
   if (kind === 'always') {
@@ -74,7 +74,7 @@ router.post('/:kind/:customer_id/:channel', async (req, res) => {
   const customer_id = req.params.customer_id;
   const channel = req.params.channel;
   const addr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  logger.info(`${addr}: POST /data/${kind}/${customer_id}/${channel}`);
+  logger.debug(`${addr}: POST /data/${kind}/${customer_id}/${channel}`);
 
   var always_yn = '';
   if (kind === 'always') {

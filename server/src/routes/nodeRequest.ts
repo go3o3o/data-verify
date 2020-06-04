@@ -15,7 +15,7 @@ const router = express.Router();
 router.post('/:kind', async (req, res) => {
   const kind = req.params.kind;
   const addr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  logger.info(`${addr}: POST /node/${kind}`);
+  logger.debug(`${addr}: POST /node/${kind}`);
   try {
     const manager = getConnectionManager().get('node');
     const repository = manager
@@ -95,7 +95,7 @@ router.post('/:kind/:request_seq', async (req, res) => {
   const kind = req.params.kind;
   const request_seq = req.params.request_seq;
   const addr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  logger.info(`${addr}: POST /node/${kind}/${request_seq}`);
+  logger.debug(`${addr}: POST /node/${kind}/${request_seq}`);
   try {
     const manager = getConnectionManager().get('node');
     const repository = manager.getRepository(NodeProgress).createQueryBuilder();
@@ -116,8 +116,8 @@ router.post('/:kind/:request_seq', async (req, res) => {
 router.delete('/:request_seq', async (req, res) => {
   const request_seq = req.params.request_seq;
   const addr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  logger.info(`${addr}: DELETE REQUEST /node/${request_seq}`);
-  logger.info(
+  logger.debug(`${addr}: DELETE REQUEST /node/${request_seq}`);
+  logger.debug(
     ` ### ${addr}: DELETE FROM dmap_collector.tb_crawl_request WHERE seq = ${request_seq}`,
   );
   try {
@@ -138,8 +138,8 @@ router.delete('/:request_seq', async (req, res) => {
 router.delete('/:progress_seq', async (req, res) => {
   const progress_seq = req.params.progress_seq;
   const addr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  logger.info(`${addr}: DELETE PROGRESS /node/${progress_seq}`);
-  logger.info(
+  logger.debug(`${addr}: DELETE PROGRESS /node/${progress_seq}`);
+  logger.debug(
     ` ### ${addr}: DELETE FROM dmap_collector.tb_crawl_progress WHERE seq = ${progress_seq}`,
   );
   try {
@@ -161,7 +161,7 @@ router.patch('', async (req, res) => {
   const request = req.body;
   // console.log(request);
   const addr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  logger.info(
+  logger.debug(
     ` ### ${addr}: dmap_collector.tb_crawl_request 수정 ${JSON.stringify(
       request,
     )}`,
