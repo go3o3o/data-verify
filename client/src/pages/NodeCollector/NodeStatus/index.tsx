@@ -10,8 +10,8 @@ type InjectedProps = {
 };
 
 function NodeStatus(props: InjectedProps) {
-  const [viewComplete, setViewComplete] = useState(true);
-  const [viewWorking, setViewWorking] = useState(true);
+  const [viewFinished, setViewFinished] = useState(true);
+  const [viewRequest, setViewRequest] = useState(true);
   const [viewError, setViewError] = useState(true);
   const [reloadSqs, setReloadSqs] = useState(0);
   const [reloadProgress, setReloadProgress] = useState(0);
@@ -27,10 +27,10 @@ function NodeStatus(props: InjectedProps) {
   };
   const buttonClick = (e: any) => {
     const progressButton = e.target.id;
-    if (progressButton === 'complete') {
-      setViewComplete(!viewComplete);
-    } else if (progressButton === 'working') {
-      setViewWorking(!viewWorking);
+    if (progressButton === 'finished') {
+      setViewFinished(!viewFinished);
+    } else if (progressButton === 'request') {
+      setViewRequest(!viewRequest);
     } else if (progressButton === 'error') {
       setViewError(!viewError);
     }
@@ -42,7 +42,7 @@ function NodeStatus(props: InjectedProps) {
   props.statusData.map((data: any) => {
     // customer_set<>: customer 중복 제거해서 set에 담기
     if (customer_set.has(data.name)) {
-      // { name: customer, [complete: 0, working: 0, error: 0] }
+      // { name: customer, [finished: 0, request: 0, error: 0] }
       json[data.status] = data.cnt;
     } else {
       // { name: customer }
@@ -84,16 +84,16 @@ function NodeStatus(props: InjectedProps) {
         {customer_arr.map(data => (
           <NodeProgress
             customer={data}
-            viewComplete={viewComplete}
-            viewWorking={viewWorking}
+            viewFinished={viewFinished}
+            viewRequest={viewRequest}
             viewError={viewError}
             reload={reloadProgress}
           />
         ))}
         <div style={{ marginTop: 10 }}>
           <Button
-            outline={viewComplete ? false : true}
-            id="complete"
+            outline={viewFinished ? false : true}
+            id="finished"
             color="primary"
             style={{
               height: '20px',
@@ -103,13 +103,13 @@ function NodeStatus(props: InjectedProps) {
             }}
             onClick={buttonClick}
           >
-            <p id="complete" style={{ fontSize: 10 }}>
+            <p id="finished" style={{ fontSize: 10 }}>
               완료
             </p>
           </Button>
           <Button
-            outline={viewWorking ? false : true}
-            id="working"
+            outline={viewRequest ? false : true}
+            id="request"
             color="warning"
             style={{
               height: '20px',
@@ -119,7 +119,7 @@ function NodeStatus(props: InjectedProps) {
             }}
             onClick={buttonClick}
           >
-            <p id="working" style={{ fontSize: 10 }}>
+            <p id="request" style={{ fontSize: 10 }}>
               진행
             </p>
           </Button>

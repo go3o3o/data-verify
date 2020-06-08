@@ -163,6 +163,7 @@ const NodeTable = ({ eventsData }: { eventsData: any }) => {
     });
   };
 
+
   const expandedRowRender = (e: any) => {
     const request_seq = e.seq;
     const columns = [
@@ -189,9 +190,9 @@ const NodeTable = ({ eventsData }: { eventsData: any }) => {
         key: 'status',
         width: '15%',
         filters: [
-          { text: 'working', value: 'Request' },
-          { text: 'complete', value: 'Finished' },
-          { text: 'error', value: 'Error' },
+          { text: 'Request', value: 'Request' },
+          { text: 'Finished', value: 'Finished' },
+          { text: 'Error', value: 'Error' },
         ],
         onFilter: (value: any, record: any) => record.status.includes(value),
         render: (record: any) => (
