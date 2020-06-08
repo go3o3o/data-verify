@@ -9,8 +9,8 @@ const requestStatusMap = {
   CRS004: <Tag>취소</Tag>,
   CRS005: <Tag color="#FF0202">에러</Tag>,
   CRS006: <Tag color="gray">테스트</Tag>,
-  complete: <Tag color="#12ABE2">완료</Tag>,
-  working: <Tag color="#FFCC00">진행</Tag>,
+  finished: <Tag color="#12ABE2">완료</Tag>,
+  request: <Tag color="#FFCC00">진행</Tag>,
   error: <Tag color="#FF0202">에러</Tag>,
   undefined: null,
 };

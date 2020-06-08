@@ -22,20 +22,6 @@ aws.config.update({
 class AwsSqs extends Component<InjectedProps> {
   constructor(props: any) {
     super(props);
-<<<<<<< HEAD
-=======
-
-    this.state = {
-      sqsData: null,
-    };
-
-    aws.config.update({
-      region: region,
-      accessKeyId: accessKeyId,
-      secretAccessKey: secretAccessKey,
-    });
-
->>>>>>> develop
     this.loadSqsList = this.loadSqsList.bind(this);
   }
 
@@ -63,16 +49,6 @@ class AwsSqs extends Component<InjectedProps> {
       QueueNamePrefix: 'dmap',
     };
     var queueList: object[] = [];
-<<<<<<< HEAD
-    console.log(aws.config);
-    sqs.listQueues(params, function(data: any) {
-      var json = {};
-      console.log(data);
-      if (data.QueueUrls !== undefined) {
-        data.QueueUrls.forEach((queueUrl: string) => {
-          console.log(queueUrl);
-          const urlParams = { QueueUrl: queueUrl, AttributeNames: ['All'] };
-=======
 
     await sqs.listQueues(params, function(err, data: any) {
       if (data.QueueUrls !== undefined) {
@@ -81,7 +57,6 @@ class AwsSqs extends Component<InjectedProps> {
             QueueUrl: queueUrl,
             AttributeNames: ['All'],
           };
->>>>>>> develop
           var json = {};
           sqs.getQueueAttributes(urlParams, function(err, data: any) {
             if (data === null) {
