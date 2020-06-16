@@ -80,7 +80,7 @@ function DmapQueue() {
       24;
     // INSERT 하는데 대략 (일자 수 / 10) 초가 걸림
     const delay = Math.ceil((endDt - startDt) / 10);
-    const url = 'http://211.39.140.72:8282/crawl';
+    const url = 'http://localhost:8282/crawl';
 
     axios
       .post(url, { params: { seq: seq } })
